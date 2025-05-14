@@ -19,8 +19,8 @@ body {
     max-width: 900px;
     margin: 0 auto;
     background-image:
-        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
     background-size: 20px 20px;
 }
 
@@ -79,15 +79,14 @@ header {
 .section-title {
     display: inline-block;
     border-bottom: 2px solid var(--text-color);
-    margin-top: 2rem; /* Added for more space above headings */
-    margin-bottom: 1.5rem; /* Increased for more space below headings */
+    margin-top: 2rem; 
+    margin-bottom: 1.5rem; 
     text-transform: uppercase;
     font-weight: 700;
     font-size: 1.2rem;
     letter-spacing: 1px;
 }
 
-/* Ensure the first heading doesn't have excessive top margin */
 main > section > .section-title:first-child {
     margin-top: 0;
 }
@@ -182,13 +181,12 @@ strong {
 .hover-box {
     position: absolute;
     display: none;
-    width: 150px; /* Adjust size as needed */
-    height: 150px; /* Adjust size as needed */
+    width: 150px; 
+    height: 150px; 
     z-index: 100;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     overflow: hidden;
-    /* Position it above and to the right of the text */
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
@@ -200,7 +198,6 @@ strong {
     object-fit: cover;
 }
 
-/* Show the hover box when hovering over the trigger */
 .hover-container:hover .hover-box {
     display: block;
 }

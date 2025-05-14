@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Peeple</title>
+        <meta name="description" content="Peeple - The world's most transparent dating app." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            body > header {
+                padding-bottom: 0.5rem;
+            }
+            header .profile {
+                margin-bottom: 0.7rem;
+            }
+            .tagline {
+                font-size: 1.4rem;
+                color: var(--text-color);
+                margin-top: 0.1rem;
+                text-align: left;
+                font-weight: bold;
+                padding-left: 0;
+            }
+            main section .section-title {
+                color: var(--accent);
+                border-bottom-color: var(--accent);
+                display: inline-block;
+            }
+            header + main .section-title {
+                margin-top: 3rem; 
+            }
+            .feature-list li {
+                border-left: 4px solid var(--accent);
+                padding-left: 1rem;
+                margin-bottom: 2.5rem;
+                list-style-type: none;
+            }
+            .feature-list strong {
+                color: var(--text-color);
+                font-weight: bold;
+            }
+            .feature-images {
+                margin-top: 1rem;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+            .feature-images img {
+                width: 150px;
+                height: auto;
+                border: 1px solid var(--text-color);
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <div class="profile">
+                <a href="peeple.html">
+                    <img
+                        src="peeple.jpeg"
+                        alt="Peeple logo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">Peeple</h1>
+                </a>
+            </div>
+            <p class="tagline">worlds most transparent dating app</p>
+            <nav class="nav-links">
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h2 class="section-title">Here's how we're different, bringing a unique vibe:</h2>
+                <ul class="list feature-list">
+                    <li>
+                        With our app, guys get <strong>free analytics</strong>. See how many women viewed your profile each week and how that compares to the average. Know your numbers.
+                    </li>
+                    <li>
+                        You can literally <strong>query our database</strong> right inside the app. Ask questions like, "What's the average number of daily matches for the top 10% of male profiles?" and get answers straight from our data.
+                    </li>
+                    <li>
+                        We sort profiles into two <strong>distinct 'vibe' buckets</strong>. Matching only happens within these curated groups, so profiles with completely different energies won't see each other, ensuring more aligned connections. For example, these two profiles would never see each other:
+                        <div class="feature-images">
+                            <img src="profile1.jpeg" alt="Profile example 1">
+                            <img src="profile2.jpeg" alt="Profile example 2">
+                        </div>
+                    </li>
+                    <li>
+                        For women, all premium features in our app are <strong>completely free</strong>. Unlock the full experience, no strings attached.
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </body>
+</html>

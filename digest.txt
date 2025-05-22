@@ -1,8 +1,108 @@
 Directory structure:
 └── ayush.site/
+    ├── blog.html
     ├── index.html
     ├── peeple.html
-    └── style.css
+    ├── style.css
+    └── blog/
+        └── startup-context.html
+
+================================================
+File: blog.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blog - Ayush</title>
+        <meta name="description" content="A collection of blog posts by Ayush." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            .blog-post-item {
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px dashed var(--text-color);
+            }
+            .blog-post-item:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+            .blog-post-title {
+                font-size: 1.3rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+            .blog-post-title a {
+                text-decoration: none;
+                color: var(--text-color);
+            }
+            .blog-post-title a:hover {
+                color: var(--accent);
+                text-decoration: underline;
+            }
+            .blog-post-excerpt {
+                margin-bottom: 0.75rem;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <div class="profile">
+                <a href="index.html">
+                    <img
+                        src="ayush.jpeg"
+                        alt="ayush's photo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">ayush</h1>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">ABOUT</a>
+                <a href="blog.html" class="nav-link active">BLOG</a>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem;">Blog Posts</h1>
+                
+                <div class="blog-post-list">
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/startup-context.html">Sharing all the context I've gathered</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">
+                            If you're looking to learn how to build a startup, start here. This post covers essential startup and technical context for aspiring builders.
+                        </p>
+                        <a href="blog/startup-context.html" class="inline-link">Read more →</a>
+                    </article>
+
+                    <!-- To add a new blog post, copy the structure above and update links/content -->
+                    <!-- 
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/another-post.html">Another Blog Post Title</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">A brief summary of the other blog post...</p>
+                        <a href="blog/another-post.html" class="inline-link">Read more →</a>
+                    </article>
+                    -->
+                </div>
+            </section>
+        </main>
+    </body>
+</html>
+
+
 
 ================================================
 File: index.html
@@ -37,6 +137,7 @@ File: index.html
             </div>
             <nav class="nav-links">
                 <a href="index.html" class="nav-link active">ABOUT</a>
+                <a href="blog.html" class="nav-link">BLOG</a>
             </nav>
         </header>
 
@@ -62,13 +163,6 @@ File: index.html
                     soon AGI will make everyone financially free and immortal.
                 </p>
 
-                <h3 class="section-title">why am I looking for an internship</h3>
-                <p class="text">
-                    due to funding delays and summer vecations in collages the
-                    app launch has been delayed to august so i have two months
-                    spare. and I am looking for a founders office, AI-ML or
-                    product intern onsite.
-                </p>
 
                 <h2 class="section-title">my works</h2>
                 <ul class="list">
@@ -444,5 +538,199 @@ strong {
 .hover-container:hover .hover-box {
     display: block;
 }
+
+
+
+================================================
+File: blog/startup-context.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sharing all the context I've gathered - Ayush's Blog</title>
+        <meta name="description" content="Ayush's blog post on startup and technical context for aspiring builders." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            main section ol.list > li { 
+                margin-bottom: 1.5rem; 
+            }
+            main section ol.list > li:last-child {
+                margin-bottom: 0.5rem; 
+            }
+
+            main section .list ol, 
+            main section .list ul { 
+                margin-top: 0.5rem;
+                margin-left: 1.5rem;    
+                list-style: initial;    
+            }
+            main section .list ol > li, 
+            main section .list ul > li { 
+                border-left: none;      
+                padding-left: 0;        
+                margin-bottom: 0.3rem;  
+                list-style-position: outside; 
+            }
+            main section .list ol ol { list-style-type: decimal; }
+            main section .list ol ul,
+            main section .list ul ul { list-style-type: disc; } 
+
+            .hover-container {
+                position: relative;
+                display: inline-block;
+            }
+            .hover-trigger {
+                text-decoration: underline;
+                text-decoration-style: dotted;
+                cursor: help;
+            }
+            .hover-box { 
+                position: absolute;
+                display: none;
+                width: 280px !important; 
+                height: auto !important; 
+                background-color: var(--bg-color);
+                border: 1px solid var(--text-color);
+                padding: 10px;
+                font-size: 0.85rem;
+                line-height: 1.4;
+                text-align: left;
+                z-index: 100;
+                box-shadow: 0 0 10px rgba(0,0,0,0.3);
+                border-radius: 5px;
+                bottom: 30px; 
+                left: 50%;
+                transform: translateX(-50%);
+                overflow: visible;
+            }
+            .hover-container:hover .hover-box {
+                display: block;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <div class="profile">
+                <a href="../index.html">
+                    <img
+                        src="../ayush.jpeg"
+                        alt="ayush's photo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">ayush</h1>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html" class="nav-link">ABOUT</a>
+                <a href="../blog.html" class="nav-link active">BLOG</a>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h1 class="section-title" style="font-size: 1.5rem; text-transform: none; border-bottom-width: 2px; margin-bottom: 1.5rem;">Sharing all the context I've gathered</h1>
+                
+                <p class="text">If you're looking to learn how to build a startup, start here. Once you go through these resources, there’s no fixed roadmap—only exploration.</p>
+                <p class="text">Will be discussing two things:</p>
+                <ul class="list"> 
+                    <li>Startup context</li>
+                    <li>Technical context</li>
+                </ul>
+
+                <h2 class="section-title">Startup Context</h2>
+                <p class="text">The hard thing to build in this is not the "gyan", "lessons". The hard thing is to build "passion", "inspiration". And honestly I do not know how to make someone wanna do startups, to ignite the fire is really hard. But there are some traits:</p>
+                <ul class="list"> 
+                    <li>If you can't stop thinking about ideas</li>
+                    <li>If you really wanna make a lot of money, become 
+                        <span class="hover-container">
+                            <span class="hover-trigger">financially free (i)</span>
+                            <span class="hover-box">
+                                You have enough money in bank that your requirements (4-5 lakhs a month for me) get sorted out by interest on that money.
+                            </span>
+                        </span>.
+                    </li>
+                    <li>Extension to above point, you are extremely dissatisfied by your current life. Even if you are earning lets say 5 lakhs a month.</li>
+                    <li>You hate doing things which are done "just bcoz the norm", "esa hi hota hai". For example: going to college lectures.</li>
+                </ul>
+                <p class="text">So these are some traits, how can you <strong>build</strong> passion/these-traits?</p>
+                <p class="text">Watching good content and being around people like that helps.</p>
+                <p class="text">I highly recommend reading <a href="https://www.twodscapital.in/files/Rich-Dad-Poor-Dad-eBook.pdf" class="inline-link" target="_blank">Lesson 1 of Rich Dad Poor Dad</a>, <a href="https://www.readdiary.com/wp-content/uploads/2022/05/Steve-Jobs-PDFDrive-1.pdf" class="inline-link" target="_blank">Steve Jobs by Walter Isaacson</a> (recommended reading side by side the coursework not all at once).</p>
+                <p class="text">And watching <a href="https://youtu.be/lXebD6nHD64?si=s0JPWuA6cjoWiqNe" class="inline-link" target="_blank">this video of Travis (founder of Uber) at IIT Bombay</a> and old <a href="https://www.youtube.com/watch?v=kdgaiyqvVA8&t=2086s&ab_channel=StoriesWithRustyPodcast" class="inline-link" target="_blank">podcasts of Varun Mayya</a>.</p>
+                
+                <p class="text">So now when we are done with lighting the fire lets go ahead with textbook lessons on startups:</p>
+                <ol class="list"> 
+                    <li>
+                        <a href="https://www.youtube.com/playlist?list=PL5q_lef6zVkaTY_cT1k7qFNF2TidHCe-1" class="inline-link" target="_blank">YC How to Start a Startup</a> (till lecture number 14) --> watch them, rewatch them. I have watched each lecture at least 4 times by now.
+                    </li>
+                    <li>Paul Graham top 10 essays:
+                        <ol> 
+                            <li><a href="http://paulgraham.com/start.html" class="inline-link" target="_blank">How to Start a Startup</a></li>
+                            <li><a href="http://paulgraham.com/ds.html" class="inline-link" target="_blank">Do Things that Don't Scale</a></li>
+                            <li><a href="http://paulgraham.com/growth.html" class="inline-link" target="_blank">Startup = Growth</a></li>
+                            <li><a href="http://paulgraham.com/makersschedule.html" class="inline-link" target="_blank">Maker's Schedule, Manager's Schedule</a></li>
+                            <li><a href="http://paulgraham.com/ideas.html" class="inline-link" target="_blank">Ideas for Startups</a></li>
+                            <li><a href="http://paulgraham.com/startupmistakes.html" class="inline-link" target="_blank">The 18 Mistakes That Kill Startups</a></li>
+                            <li><a href="http://paulgraham.com/startupideas.html" class="inline-link" target="_blank">How to Get Startup Ideas</a></li>
+                            <li><a href="http://paulgraham.com/good.html" class="inline-link" target="_blank">Be Good</a></li>
+                            <li><a href="http://paulgraham.com/really.html" class="inline-link" target="_blank">What Startups Are Really Like</a></li>
+                            <li><a href="http://paulgraham.com/hackinvest.html" class="inline-link" target="_blank">The Hacker’s Guide to Investors</a></li>
+                        </ol>
+                    </li>
+                    <li>Read <a href="https://navalmanack.s3.amazonaws.com/Eric-Jorgenson_The-Almanack-of-Naval-Ravikant_Final.pdf" class="inline-link" target="_blank">The Almanack of Naval Ravikant</a> and <a href="https://morfene.com/021.pdf" class="inline-link" target="_blank">Zero to One</a>.</li>
+                    <li>Sajith Pai:
+                        <ul> 
+                            <li>Talk: <a href="https://www.youtube.com/watch?v=WI9pTXw59DY&t=3630s&pp=ygURc2FqaXRoIHBhaSBhbnRsZXI%3D" class="inline-link" target="_blank">here</a></li>
+                            <li>Articles:
+                                <ol>
+                                    <li><a href="https://sajithpai.com/the-indus-valley-playbook/" class="inline-link" target="_blank">The Indus Valley Playbook</a></li>
+                                    <li><a href="https://sajithpai.com/the-busy-founders-guide-to-pmf/" class="inline-link" target="_blank">The Busy Founder's Guide to PMF</a></li>
+                                    <li><a href="https://sajithpai.com/tam-notes-thoughts/" class="inline-link" target="_blank">TAM</a></li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Kunal Shah Delta 4 framework: <a href="https://www.youtube.com/watch?v=sk6hA6JR9gI&pp=ygUZa3VuYWwgc2hhaCAgaWltIGFobWVkYWJhZA%3D%3D" class="inline-link" target="_blank">watch here</a>.</li>
+                </ol>
+
+                <h2 class="section-title">Technical Context</h2>
+                <ul class="list"> 
+                    <li>HTML: <a href="https://www.youtube.com/watch?v=BsDoLVMnmZs&pp=ygUSY29kZXdpdGhoYXJyeSBodG1s" class="inline-link" target="_blank">CodeWithHarry HTML</a></li>
+                    <li>CSS: <a href="https://www.youtube.com/watch?v=Edsxf_NBFrw&ab_channel=CodeWithHarry" class="inline-link" target="_blank">CodeWithHarry CSS</a> (only study till media queries)</li>
+                </ul>
+                <p class="text">If you have never coded before, watch this too: <a href="https://www.youtube.com/playlist?list=PLhQjrBD2T381WAHyx1pq-sBfykqMBI7V4" class="inline-link" target="_blank">CS50x lectures</a>.</p>
+                <p class="text">Now after completing all these, we will now move to React and Node.js. Will be studying them through the course of Harkirat Singh (<em>some link I'll add later</em>).</p>
+
+                <h3 class="section-title" style="font-size: 1.1rem; border-bottom-width: 1px;">AI ML</h3>
+                <ul class="list"> 
+                    <li>Linear Regression</li>
+                    <li>Logistic Regression</li>
+                    <li>Softmax function</li>
+                    <li>Neural Networks:
+                        <ul> 
+                            <li>Lecture 1: <a href="https://www.youtube.com/watch?v=MfIjxPh6Pys&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=11&pp=iAQB" class="inline-link" target="_blank">Link</a></li>
+                            <li>Lecture 2: <a href="https://www.youtube.com/watch?v=zUazLXZZA2U&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=12&pp=iAQB" class="inline-link" target="_blank">Link</a></li>
+                            <li>Lecture 3 (Karpathy): <a href="https://www.youtube.com/watch?v=VMj-3S1tku0&list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ" class="inline-link" target="_blank">Link</a></li>
+                        </ul>
+                    </li>
+                    <li>Transformers:
+                        <ul> 
+                            <li>Lecture 1 (Playlist): <a href="https://www.youtube.com/playlist?list=PLu2S64ZsXxCNOW_jPjENkQZqC6DhMzZOL" class="inline-link" target="_blank">Link</a></li>
+                            <li>Lecture 2 (Karpathy): <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY&list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ&index=7&t=1s&pp=iAQB" class="inline-link" target="_blank">Link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </body>
+</html>
 
 

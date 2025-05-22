@@ -1,0 +1,448 @@
+Directory structure:
+└── ayush.site/
+    ├── index.html
+    ├── peeple.html
+    └── style.css
+
+================================================
+File: index.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ayush</title>
+        <meta name="description" content="ayush's personal website" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <body>
+        <header>
+            <div class="profile">
+                <a href="index.html">
+                    <img
+                        src="ayush.jpeg"
+                        alt="ayush's photo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">ayush</h1>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active">ABOUT</a>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h2 class="section-title">こんにちは！</h2>
+
+                <p class="text">
+                    I am <strong style="color: var(--accent);">ayush</strong>, pre-final at iit roorkee. currently I am
+                    building
+                    <a href="peeple.html" class="inline-link">peeple</a>. I am generally interested in
+                    consumer startups, AGI, Party Dancing, skatebording and
+                    comming up with insights like
+                    <a href="https://x.com/goyalayus/status/1922024740639682799" class="inline-link"
+                        >these</a
+                    >.
+                </p>
+
+                <h3 class="section-title">
+                    What important truth do very few people agree with me on?
+                </h3>
+                <p class="text">
+                    soon AGI will make everyone financially free and immortal.
+                </p>
+
+                <h3 class="section-title">why am I looking for an internship</h3>
+                <p class="text">
+                    due to funding delays and summer vecations in collages the
+                    app launch has been delayed to august so i have two months
+                    spare. and I am looking for a founders office, AI-ML or
+                    product intern onsite.
+                </p>
+
+                <h2 class="section-title">my works</h2>
+                <ul class="list">
+                    <li>
+                        raised incubation for
+                        <a href="peeple.html" class="inline-link">peeple</a> from
+                        <a href="https://tides.iitr.ac.in/" class="inline-link">Tides</a> with my
+                        buddies <a href="https://x.com/Sikandar_lx" class="inline-link" target="_blank">@Sikandar_lx</a> and <a href="https://x.com/arnnnvvv" class="inline-link" target="_blank">@arnnnvvv</a>
+                    </li>
+                    <li>Secretary of <a href="https://www.instagram.com/gdsc_iitr/" class="inline-link" target="_blank">gdsc</a> iitr</li>
+                    <li>
+                        built
+                        <a href="https://ace-sand-pi.vercel.app/" class="inline-link">ace</a> that
+                        cuts ml paper and code reading time by 8hrs/wk
+                    </li>
+                    <li>
+                        built
+                        <a href="https://github.com/arnnvv/cutcrap" class="inline-link"
+                            >cutTheCrap</a
+                        >, takes your book and gives you a much mroe efficient
+                        100 page version of it.
+                    </li>
+                    <li>wrote websockets from scratch in c</li>
+                    <li>wrote gpt-2 code from scratch</li>
+                </ul>
+
+                <h2 class="section-title">CONTACT</h2>
+                <p class="text">
+                    if you want to talk, vibe or build something cool with me
+                    hit me up at
+                    <a href="mailto:ayush_g@ar.iitr.ac.in" class="inline-link"
+                        >ayush_g@ar.iitr.ac.in</a
+                    >
+                </p>
+
+                <div class="social-links">
+                    <a href="https://x.com/goyalayus" class="social-link"
+                        >X/goyalayus</a
+                    >
+                    <a
+                        href="https://github.com/goyalayus"
+                        target="_blank"
+                        class="social-link"
+                        >GIT</a
+                    >
+                    <a
+                        href="https://in.linkedin.com/in/ayush-goyal-45334418a"
+                        target="_blank"
+                        class="social-link"
+                        >Linkedin</a
+                    >
+                </div>
+            </section>
+        </main>
+    </body>
+</html>
+
+
+
+================================================
+File: peeple.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Peeple</title>
+        <meta name="description" content="Peeple - The world's most transparent dating app." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            body > header {
+                padding-bottom: 0.5rem;
+            }
+            header .profile {
+                margin-bottom: 0.7rem;
+            }
+            .tagline {
+                font-size: 1.4rem;
+                color: var(--text-color);
+                margin-top: 0.1rem;
+                text-align: left;
+                font-weight: bold;
+                padding-left: 0;
+            }
+            main section .section-title {
+                color: var(--accent);
+                border-bottom-color: var(--accent);
+                display: inline-block;
+            }
+            header + main .section-title {
+                margin-top: 3rem; 
+            }
+            .feature-list li {
+                border-left: 4px solid var(--accent);
+                padding-left: 1rem;
+                margin-bottom: 2.5rem;
+                list-style-type: none;
+            }
+            .feature-list strong {
+                color: var(--text-color);
+                font-weight: bold;
+            }
+            .feature-images {
+                margin-top: 1rem;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+            .feature-images img {
+                width: 150px;
+                height: auto;
+                border: 1px solid var(--text-color);
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <div class="profile">
+                <a href="peeple.html">
+                    <img
+                        src="peeple.jpeg"
+                        alt="Peeple logo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">Peeple</h1>
+                </a>
+            </div>
+            <p class="tagline">worlds most transparent dating app</p>
+            <nav class="nav-links">
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h2 class="section-title">Here's how we're different, bringing a unique vibe:</h2>
+                <ul class="list feature-list">
+                    <li>
+                        With our app, guys get <strong>free analytics</strong>.For example see how many women viewed your profile each week and how that compares to the average. Know your numbers.
+                    </li>
+                    <li>
+                        You can literally <strong>query our database</strong> right inside the app. Ask questions like, "What's the average number of daily matches for the top 10% of male profiles?" and get answers straight from our data.
+                    </li>
+                    <li>
+                        We sort profiles into two <strong>distinct 'vibe' buckets</strong>. Matching only happens within these curated groups, so profiles with completely different energies won't see each other, ensuring more aligned connections. For example, these two profiles would never see each other:
+                        <div class="feature-images">
+                            <img src="profile1.jpeg" alt="Profile example 1">
+                            <img src="profile2.jpeg" alt="Profile example 2">
+                        </div>
+                    </li>
+                    <li>
+                        For women, all premium features in our app are <strong>completely free</strong>. Unlock the full experience, no strings attached.
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </body>
+</html>
+
+
+
+================================================
+File: style.css
+================================================
+:root {
+    --bg-color: #f6f6f6;
+    --text-color: #191919;
+    --accent: #ff5500;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Space Mono", monospace;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--text-color);
+    padding-bottom: 1rem;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile a {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.profile-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border: 2px solid var(--text-color);
+}
+
+.site-title {
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.nav-link.active {
+    color: var(--accent);
+}
+
+.section-title {
+    display: inline-block;
+    border-bottom: 2px solid var(--text-color);
+    margin-top: 2rem; 
+    margin-bottom: 1.5rem; 
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+main > section > .section-title:first-child {
+    margin-top: 0;
+}
+
+
+.text {
+    margin-bottom: 1.5rem;
+}
+
+strong {
+    color: var(--accent);
+}
+
+.jp-divider {
+    height: 2px;
+    background-color: #ddd;
+    margin: 2rem 0;
+}
+
+.list {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.list li {
+    padding: 0.3rem 0 0.3rem 1rem;
+    border-left: 2px solid var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.japanese-text {
+    background-color: #f0f0f0;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.social-link {
+    text-decoration: none;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.social-link:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+.inline-link {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 1rem;
+    }
+
+    .profile {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+    }
+}
+
+/* Hover effect styling */
+.hover-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-trigger {
+    cursor: pointer;
+}
+
+.hover-box {
+    position: absolute;
+    display: none;
+    width: 150px; 
+    height: 150px; 
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    overflow: hidden;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hover-container:hover .hover-box {
+    display: block;
+}
+
+

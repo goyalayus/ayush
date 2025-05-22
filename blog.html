@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blog - Ayush</title>
+        <meta name="description" content="A collection of blog posts by Ayush." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            .blog-post-item {
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px dashed var(--text-color);
+            }
+            .blog-post-item:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+            .blog-post-title {
+                font-size: 1.3rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+            .blog-post-title a {
+                text-decoration: none;
+                color: var(--text-color);
+            }
+            .blog-post-title a:hover {
+                color: var(--accent);
+                text-decoration: underline;
+            }
+            .blog-post-excerpt {
+                margin-bottom: 0.75rem;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <div class="profile">
+                <a href="index.html">
+                    <img
+                        src="ayush.jpeg"
+                        alt="ayush's photo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">ayush</h1>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">ABOUT</a>
+                <a href="blog.html" class="nav-link active">BLOG</a>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem;">Blog Posts</h1>
+                
+                <div class="blog-post-list">
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/startup-context.html">Sharing all the context I've gathered</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">
+                            If you're looking to learn how to build a startup, start here. This post covers essential startup and technical context for aspiring builders.
+                        </p>
+                        <a href="blog/startup-context.html" class="inline-link">Read more →</a>
+                    </article>
+
+                    <!-- To add a new blog post, copy the structure above and update links/content -->
+                    <!-- 
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/another-post.html">Another Blog Post Title</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">A brief summary of the other blog post...</p>
+                        <a href="blog/another-post.html" class="inline-link">Read more →</a>
+                    </article>
+                    -->
+                </div>
+            </section>
+        </main>
+    </body>
+</html>

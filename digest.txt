@@ -5,6 +5,7 @@ Directory structure:
     ├── peeple.html
     ├── style.css
     └── blog/
+        ├── imagegen-skill-issue.html
         ├── startup-context.html
         └── summer-goals.html
 
@@ -77,6 +78,16 @@ File: blog.html
                 <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem;">Blog Posts</h1>
                 
                 <div class="blog-post-list">
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/imagegen-skill-issue.html">Okay, so it is a skill issue</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">
+                            My journey from initial disappointment with GPT-4 image generation to understanding the crucial role of skilled prompting. Includes an example with a detailed prompt.
+                        </p>
+                        <a href="blog/imagegen-skill-issue.html" class="inline-link">Read more →</a>
+                    </article>
+
                     <article class="blog-post-item">
                         <h2 class="blog-post-title">
                             <a href="blog/summer-goals.html">What am I doing this summer.</a>
@@ -549,6 +560,202 @@ strong {
 .hover-container:hover .hover-box {
     display: block;
 }
+
+
+
+================================================
+File: blog/imagegen-skill-issue.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Okay, so it is a skill issue - GPT-4 Image Generation - Ayush's Blog</title>
+        <meta name="description" content="My journey from initial disappointment with GPT-4 image generation to understanding the crucial role of skilled prompting." />
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Okay, so it is a skill issue - GPT-4 Image Generation - Ayush's Blog" />
+        <meta property="og:description" content="My journey from initial disappointment with GPT-4 image generation to understanding the crucial role of skilled prompting." />
+        <meta property="og:image" content="https://goyalayus.github.io/pin2.jpeg" /> <!-- Assuming pin2.jpeg is at the site root for OG -->
+        <meta property="og:url" content="https://goyalayus.github.io/blog/imagegen-skill-issue.html" />
+        <meta property="og:site_name" content="Ayush's Blog" />
+
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Okay, so it is a skill issue - GPT-4 Image Generation - Ayush's Blog" />
+        <meta name="twitter:description" content="My journey from initial disappointment with GPT-4 image generation to understanding the crucial role of skilled prompting." />
+        <meta name="twitter:image" content="https://goyalayus.github.io/pin2.jpeg" /> <!-- Assuming pin2.jpeg is at the site root for Twitter -->
+        <meta name="twitter:site" content="@goyalayus" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            .prompt-block {
+                background-color: #f0f0f0;
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+                overflow-x: auto;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                border: 1px solid #ddd;
+                border-left: 4px solid var(--accent);
+                font-size: 0.9em; /* Slightly smaller for prompt text */
+            }
+            .blog-image {
+                display: block; /* Ensures margin auto works for centering */
+                max-width: 250px; /* Restrict maximum width - MADE SMALLER */
+                width: 100%; /* Responsive, but won't exceed max-width */
+                height: auto; /* Maintain aspect ratio */
+                margin: 1.5rem auto; /* Center the image if it's smaller than container */
+                border: 1px solid #ccc;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="profile">
+                <a href="../index.html">
+                    <img
+                        src="../ayush.jpeg"
+                        alt="ayush's photo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">ayush</h1>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html" class="nav-link">ABOUT</a>
+                <a href="../blog.html" class="nav-link active">BLOG</a>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h1 class="section-title" style="font-size: 1.5rem; text-transform: none; border-bottom-width: 2px; margin-bottom: 1.5rem;">Okay, so it is a skill issue</h1>
+                
+                <p class="text">When I first heard the hype around gpt-4 imagegen on twitter, I though design was solved. like the examples were so good. but then when I tried it out it sucked. It was basically of no use other than making ghibhli images.</p>
+
+                <p class="text">Yesterday I tried something, I picked this image below from pinterest.</p>
+                
+                <img src="../pin1.jpeg" alt="Original inspiration image from Pinterest for papercut texture pack design" class="blog-image">
+
+                <p class="text">And gave it to gpt to analyze it. and then asked him to come up with a prompt to make this exact image. he gave me this prompt:</p>
+
+                <pre class="prompt-block">
+"Generate a promotional graphic for a digital 'Papercut Texture Pack.' The overall style is grunge, distressed, and vintage, evoking aged paper or a worn zine cover.
+
+Background Image:
+The background should feature a close-up, slightly desaturated image of a woman's face, primarily showing her right eye, nose, lips, and part of her ear and hair. Her gaze is soft and directed slightly off-camera. The image of the woman should be heavily processed with a prominent halftone dot pattern (CMYK-style dots if possible, with a reddish-brown dominant hue) and overlaid with various textures.
+
+Color Palette:
+The dominant colors for the background should be warm, earthy tones: deep reds, browns, and desaturated oranges. All text elements must be bright white for maximum contrast.
+
+Textures and Overlays:
+The entire image must be overlaid with heavy grunge textures, including:
+
+    Realistic paper folds and creases (some sharp, some soft).
+
+    Visible scratches, scuffs, and dust particles.
+
+    A subtle, faded grid pattern (thin lines, possibly reddish or white) visible across the image.
+
+    A general film grain or noise effect.
+
+Typography and Text Elements (all in white, sans-serif font):
+
+    Main Title (Center):
+
+        Text: "PAPERCUT"
+
+        Font: Very bold, uppercase, sans-serif (industrial or stencil-like feel, but solid letters).
+
+        Effect: Letters should have a subtle internal texture or a slight "cutout" appearance, enhancing the papercut theme.
+
+        Placement: Prominently centered horizontally, approximately mid-upper third of the image.
+
+    Subtitle (Center, below Main Title):
+
+        Text: "< TEXTURE PACK >" (including the angle brackets).
+
+        Font: Sans-serif, uppercase, smaller than the main title but still bold.
+
+        Placement: Directly beneath "PAPERCUT."
+
+    Informational Text (Top Left):
+
+        Text: "200 FILES"
+
+        Font: Small, sans-serif, uppercase.
+
+        Placement: Upper left quadrant.
+
+    Informational Text (Top Right/Center-Right):
+
+        Line 1: "100 FILES TRANSPARENT PNG" (with "PNG" aligned to the right of "TRANSPARENT")
+
+        Line 2: "100 FILES MATTE / ORIGINAL PNG" (with "PNG" aligned to the right of "ORIGINAL")
+
+        Font: Small, sans-serif, uppercase.
+
+        Placement: Upper right quadrant, below the woman's eye level.
+
+    Badges (Left, below Main Title level):
+
+        Two circular badges.
+
+        Left Badge Text: "4K" (white text on a dark, almost black circular background).
+
+        Right Badge Text: "PNG" (white text on a dark, almost black circular background).
+
+        Font: Sans-serif, uppercase.
+
+        Placement: To the left of the vertical center, slightly below the "PAPERCUT" baseline.
+
+    Informational Text (Right, below Badges level):
+
+        Text: "FREE SAMPLE PACK AVAILABLE" (stacked in three lines: "FREE", "SAMPLE PACK", "AVAILABLE").
+
+        Font: Small, sans-serif, uppercase.
+
+        Placement: Right of the vertical center, roughly aligned horizontally with or slightly below the badges. Include a small, stylized downward-right pointing arrow icon (a simple 'L' shape rotated) above this text block.
+
+    Website URL (Bottom Center):
+
+        Text: "WWW.DESIGN-SYNDROME.CO"
+
+        Font: Sans-serif, uppercase, medium size (larger than other informational text but smaller than subtitle).
+
+        Placement: Bottom of the image, centered.
+
+Composition and Lighting:
+
+    The composition should feel layered, with text appearing on top of the textured image.
+
+    Lighting should be diffuse, enhancing the textures, without harsh shadows from the text itself.
+
+    Ensure text legibility against the complex background, perhaps with a very subtle drop shadow or outline on the text if needed, but prioritize a flat, integrated look if possible.
+
+Overall Impression:
+The final image must look like a physical, aged print that has been scanned, complete with imperfections. It should be atmospheric, tactile, and instantly communicate the product's aesthetic."
+                </pre>
+
+                <p class="text">And the output gpt gave is this image below.</p>
+
+                <img src="../pin2.jpeg" alt="GPT-4 generated image based on detailed prompt for papercut texture pack design" class="blog-image">
+
+                <p class="text">So I guess it's a skill issue afterall, if you know design gpt-4 imagegen is a great tool. if not you will not be able to produce great designs.</p>
+            </section>
+        </main>
+    </body>
+</html>
 
 
 

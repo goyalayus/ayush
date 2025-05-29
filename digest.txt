@@ -5,6 +5,7 @@ Directory structure:
     ├── peeple.html
     ├── style.css
     └── blog/
+        ├── how-llm-tokenizers-work-bpe.html
         ├── imagegen-skill-issue.html
         ├── startup-context.html
         └── summer-goals.html
@@ -78,6 +79,16 @@ File: blog.html
                 <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem;">Blog Posts</h1>
                 
                 <div class="blog-post-list">
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/how-llm-tokenizers-work-bpe.html">How LLM Tokenizers Work: Understanding Byte-Pair Encoding (BPE)</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">
+                            ChatGPT doesn't just 'understand' English; it processes numbers. This post explains how tokenizers, especially Byte-Pair Encoding (BPE), convert your text into a format LLMs can work with using a simplified example.
+                        </p>
+                        <a href="blog/how-llm-tokenizers-work-bpe.html" class="inline-link">Read more →</a>
+                    </article>
+
                     <article class="blog-post-item">
                         <h2 class="blog-post-title">
                             <a href="blog/imagegen-skill-issue.html">Okay, so it is a skill issue</a>
@@ -560,6 +571,219 @@ strong {
 .hover-container:hover .hover-box {
     display: block;
 }
+
+
+
+================================================
+File: blog/how-llm-tokenizers-work-bpe.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>How LLM Tokenizers Work: Understanding Byte-Pair Encoding (BPE) - Ayush's Blog</title>
+        <meta name="description" content="ChatGPT doesn't just 'understand' English; it processes numbers. This post explains how tokenizers, especially Byte-Pair Encoding (BPE), convert your text into a format LLMs can work with." />
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="How LLM Tokenizers Work: Understanding BPE - Ayush's Blog" />
+        <meta property="og:description" content="ChatGPT doesn't just 'understand' English; it processes numbers. This post explains how tokenizers, especially Byte-Pair Encoding (BPE), convert your text into a format LLMs can work with." />
+        <meta property="og:image" content="https://goyalayus.github.io/blog-og-tokenizer.png" /> <!-- REPLACE THIS WITH AN ACTUAL IMAGE URL -->
+        <meta property="og:url" content="https://goyalayus.github.io/blog/how-llm-tokenizers-work-bpe.html" />
+        <meta property="og:site_name" content="Ayush's Blog" />
+
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="How LLM Tokenizers Work: Understanding BPE - Ayush's Blog" />
+        <meta name="twitter:description" content="ChatGPT doesn't just 'understand' English; it processes numbers. This post explains how tokenizers, especially Byte-Pair Encoding (BPE), convert your text into a format LLMs can work with." />
+        <meta name="twitter:image" content="https://goyalayus.github.io/blog-og-tokenizer.png" /> <!-- REPLACE THIS WITH AN ACTUAL IMAGE URL -->
+        <meta name="twitter:site" content="@goyalayus" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            main section h2 { /* Subheadings like "Flawed Approaches" */
+                font-size: 1.3rem;
+                margin-top: 2.5rem; /* Increased top margin */
+                margin-bottom: 1.25rem; /* Increased bottom margin */
+                text-transform: none;
+                border-bottom: 1px solid var(--text-color);
+                display: inline-block;
+            }
+
+            /* Styling for the main ordered list (e.g., "Flawed Approaches") */
+            main section > ol.list {
+                list-style-type: decimal;
+                list-style-position: outside;
+                margin-left: 1.5rem; 
+                margin-bottom: 1.5rem;
+            }
+            main section > ol.list > li {
+                border-left: none; /* Override default from style.css */
+                padding-left: 0.5rem; /* Space after number */
+                margin-bottom: 1.25rem; /* Increased space between items */
+                line-height: 1.6;
+            }
+             main section > ol.list > li strong { /* Make the title of list item bolder if needed */
+                font-weight: 700;
+            }
+
+
+            .content-block { /* For the BPE example box */
+                background-color: #f0f0f0;
+                padding: 1.5rem;
+                margin-top: 1rem; /* Space above the block */
+                margin-bottom: 2rem; /* Space below the block */
+                overflow-x: auto;
+                border: 1px solid #ddd;
+                border-left: 4px solid var(--accent);
+                font-size: 0.9em;
+                border-radius: 4px;
+                line-height: 1.6;
+            }
+            .content-block p {
+                margin-bottom: 1rem; 
+            }
+            .content-block p:last-child {
+                margin-bottom: 0;
+            }
+            .content-block p strong { /* For labels like "Sentence:", "Iteration 1:" */
+                color: var(--text-color); 
+                font-weight: 700;
+            }
+            .content-block pre {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                background-color: #e9e9e9; 
+                padding: 0.75rem 1rem;
+                margin-top: 0.5rem; 
+                margin-bottom: 1rem; 
+                border-radius: 3px;
+                font-size: 0.95em; 
+                line-height: 1.5;
+            }
+            .content-block ol {
+                list-style-type: decimal;
+                list-style-position: outside; 
+                margin-left: 1.5rem; 
+                margin-top: 0.5rem;
+                margin-bottom: 1.25rem; /* Increased space */
+            }
+            .content-block ol > li {
+                padding-left: 0.5rem; 
+                margin-bottom: 1rem; /* Increased space */
+            }
+            .content-block ol > li:last-child {
+                margin-bottom: 0;
+            }
+            .content-block ol pre { 
+                margin-top: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="profile">
+                <a href="../index.html">
+                    <img
+                        src="../ayush.jpeg"
+                        alt="ayush's photo"
+                        class="profile-img"
+                    />
+                    <h1 class="site-title">ayush</h1>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="../index.html" class="nav-link">ABOUT</a>
+                <a href="../blog.html" class="nav-link active">BLOG</a>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <h1 class="section-title" style="font-size: 1.5rem; text-transform: none; border-bottom-width: 2px; margin-bottom: 1.5rem;">How LLM Tokenizers Work: Understanding Byte-Pair Encoding (BPE)</h1>
+                
+                <p class="text">ChatGPT doesn't understand your English words directly; it only understands numbers. So whenever you prompt something into it, it first generates numbers associated with each word (or part of a word) and then processes those numbers.</p>
+                <p class="text">For example, the sentence "he ate a crocodile." might be converted into a sequence of numbers like <code>[234, 412, 232, 767]</code>.</p>
+                <p class="text">The algorithm responsible for this conversion—turning words into numbers—is called a tokenizer.</p>
+
+                <h2>Flawed Approaches to Tokenization</h2>
+                <p class="text">If you first think about how to design a tokenizer, some basic approaches come to mind, but they have significant issues:</p>
+                <ol class="list">
+                    <li>
+                        <strong>Assign a number to each character:</strong> Instead of assigning a number to a whole word, we could assign one to each character (e.g., a → 1, b → 2).
+                        <br/>For example: "he ate a crocodile" → <code>['h','e',' ','a','t','e',' ','a',' ','c','r','o','c','o','d','i','l','e']</code> → <code>[8, 5, 19, 1, 14, 5, 19, 1, 19, 3, 12, 11, 3, 11, 4, 9, 10, 5]</code> (hypothetical mapping).
+                        <br/>The issue with this is that the input sequences become very long, making processing slow and costly. Also, individual characters often don't carry enough semantic meaning on their own.
+                    </li>
+                    <li>
+                        <strong>Assign each word in the world a specific number:</strong> Doing this is very hard because the number of unique words in any language is vast (practically infinite if you consider all variations, typos, new words, etc.). This would lead to an enormous vocabulary and other problems like handling unknown words.
+                    </li>
+                </ol>
+
+                <h2>The Optimal Solution: Byte-Pair Encoding (BPE)</h2>
+                <p class="text">So, what's the optimal solution? Many modern LLMs use a technique called Byte-Pair Encoding (BPE).</p>
+                <p class="text">LLMs are trained on huge amounts of text data from the internet. The BPE algorithm also learns from this data. Here's the core idea:
+                You take the training data, and for a pre-decided number of iterations (e.g., 30,000 to 50,000), you repeat the following steps:
+                Find the pair of characters (or existing tokens) that appears most frequently together in the data.
+                Merge this pair into a single new token.
+                Add this new token to your vocabulary.</p>
+                <p class="text">This way, common words (like "the", "is") or common sub-word units (like "ing", "est", "token") eventually become single tokens in the vocabulary, while rare words can still be represented as a sequence of smaller, known sub-word tokens.</p>
+
+                <p class="text">Let's look at a simplified, illustrative example of how BPE might work on a small piece of text. The following is a conceptual walkthrough:</p>
+                
+                <div class="content-block">
+                    <p>Okay, let's run two iterations of BPE on the given sentence, with minimal explanation to emulate the algorithmic steps:</p>
+
+                    <p><strong>Sentence:</strong> "The sun rose quietly over the hills, casting golden light across the valley as birds chirped softly, welcoming the calm beauty of a new day."</p>
+
+                    <p><strong>Initial Tokens (with end-of-word markers like <code></w></code>, and assuming basic tokenization where words are units):</strong></p>
+                    <pre>"The</w>", "sun</w>", "rose</w>", "quietly</w>", "over</w>", "the</w>", "hills</w>", "casting</w>", "golden</w>", "light</w>", "across</w>", "the</w>", "valley</w>", "as</w>", "birds</w>", "chirped</w>", "softly</w>", "welcoming</w>", "the</w>", "calm</w>", "beauty</w>", "of</w>", "a</w>", "new</w>", "day</w>"</pre>
+                    <p>(Note: BPE often starts from individual characters of the training corpus. For this example, we're simplifying the starting point.)</p>
+
+                    <p><strong>Initial Vocabulary (unique characters from the sentence, plus the end-of-word marker):</strong></p>
+                    <pre>{'T', 'h', 'e', '</w>', 's', 'u', 'n', 'r', 'o', 'q', 'i', 't', 'l', 'y', 'v', 'c', 'a', 'g', 'd', 'p', 'f', 'm', 'b', 'k', 'w' ... (all unique characters)}</pre>
+
+                    <p><strong>Iteration 1:</strong></p>
+                    <ol>
+                        <li><strong>Count Adjacent Pairs:</strong> (Example: "T" "h", "h" "e", "e" "</w>", etc., across the whole corpus)</li>
+                        <li><strong>Most Frequent Pair:</strong> Let's say, hypothetically, after counting, the most frequent pair is ("e", "</w>").</li>
+                        <li><strong>Merge:</strong> Create new token "e</w>".</li>
+                        <li><strong>Updated Tokens (Conceptual):</strong> Words ending in "e" would now use this new token. For example, "rose</w>" could be seen as <code>r o s e</w></code>. The representation in the text changes.
+                            <pre>"Th e</w>", "sun</w>", "ros e</w>", "quietly</w>", "over</w>", "th e</w>", "hills</w>", ...</pre>
+                        </li>
+                        <li><strong>Updated Vocabulary:</strong> Now includes "e</w>" as a token.
+                            <pre>{..., 'e</w>'}</pre>
+                        </li>
+                    </ol>
+
+                    <p><strong>Iteration 2:</strong></p>
+                    <ol>
+                        <li><strong>Count Adjacent Pairs:</strong> (Now including "e</w>" as a potential part of a pair) Let's say the most frequent is ("t", "h").</li>
+                        <li><strong>Merge:</strong> Create new token "th".</li>
+                        <li><strong>Updated Tokens (Conceptual):</strong> Sequences of "th" would now use this token.
+                            <pre>"Th e</w>", "sun</w>", "ros e</w>", "quietly</w>", "over</w>", "th e</w>", "hills</w>", ... </pre>
+                            (Note: "The" might become "Th" + "e</w>" if "Th" was already a token or became one. If "th" is a new token, then "the" as <code>t h e</w></code> might become <code>th e</w></code>.)
+                        </li>
+                        <li><strong>Updated Vocabulary:</strong> Now includes "th" as a token.
+                             <pre>{..., 'e</w>', 'th'}</pre>
+                        </li>
+                    </ol>
+                    <p><strong>Result:</strong> After two iterations, "e</w>" and "th" have been added to the vocabulary based on the hypothetical frequency of pairs. The sentence's tokenization has been updated accordingly, with these new units treated as single tokens where they appear.</p>
+                </div>
+
+                <p class="text">So, after many thousands of such iterations, the vocabulary will contain a mix of individual characters, common sub-words (like "-ing", "pre-"), and full common words ("love", "hello").</p>
+                <p class="text">When a ChatGPT user types a word like "loveable", the tokenizer will look up its vocabulary. If "love" is token 87 and "able" is token 21, then "loveable" might be broken down into <code>[87, 21]</code> and this sequence of numbers is given as input to the GPT model.</p>
+                <p class="text">There are many online websites where you can visualize tokenizers in action for different LLMs and see how they break down text.</p>
+            </section>
+        </main>
+    </body>
+</html>
 
 
 

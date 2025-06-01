@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>2 Startups - Ayush's Blog</title>
+        <meta name="description" content="The critical distinction between pre-PMF and post-PMF phases in startups. Why understanding this two-part nature is key for founders." />
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="2 Startups - Ayush's Blog" />
+        <meta property="og:description" content="The critical distinction between pre-PMF and post-PMF phases in startups. Why understanding this two-part nature is key for founders." />
+        <meta property="og:image" content="https://goyalayus.github.io/ayush.jpeg" />
+        <meta property="og:url" content="https://goyalayus.github.io/blog/two-startups.html" />
+        <meta property="og:site_name" content="Ayush's Blog" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            body {
+                background-color: #ffffff;
+                background-image: none;
+                font-family: 'Space Mono', monospace;
+                color: #333333;
+                line-height: 1.6;
+                padding: 0.5rem 1rem 2rem 1rem;
+                max-width: 700px;
+                margin: 0.5rem auto 2rem auto;
+            }
+
+            main {
+                padding-top: 0;
+            }
+
+            .page-main-title {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                border-bottom: none;
+                text-transform: none;
+                text-align: left;
+            }
+
+            .content-section h2 { /* Default h2 style */
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 2.5rem;
+                margin-bottom: 1rem;
+                border-bottom: none;
+                text-transform: none;
+            }
+
+            .subheading-plain { /* For "What's PMF?" when not in a box, or as a base */
+                font-size: 1.4rem;
+                font-weight: 400;
+                color: #191919;
+                margin-top: 2.5rem;
+                margin-bottom: 1rem;
+                border-bottom: none;
+                text-transform: none;
+            }
+
+            .content-section p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                color: #333333;
+            }
+
+            .content-section ul {
+                list-style: disc;
+                margin-left: 20px;
+                padding-left: 5px;
+                margin-bottom: 1.5rem;
+            }
+
+            .content-section ul li {
+                margin-bottom: 0.75rem;
+                border-left: none;
+                padding-left: 0;
+            }
+             .content-section ul li strong {
+                font-weight: 700;
+            }
+
+            .pmf-phases {
+                list-style-type: decimal;
+                padding-left: 25px;
+                margin-top: 0.5rem;
+                margin-bottom: 1.5rem;
+                color: var(--accent);
+            }
+
+            .pmf-phases li {
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                border-left: none;
+                padding-left: 0;
+            }
+            
+            .orange-highlight {
+                color: var(--accent);
+                margin-top: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            /* New style for the definition box */
+            .definition-box {
+                background-color: #f9f9f9; /* Slightly off-white background */
+                border: 1px solid #e0e0e0; /* Softer border color */
+                border-left: 4px solid var(--accent); /* Accent on the left */
+                padding: 1.25rem; /* Internal spacing */
+                margin-top: 2rem; /* Space above the box */
+                margin-bottom: 2rem; /* Space below the box */
+                border-radius: 4px; /* Slightly rounded corners */
+            }
+
+            .definition-box .subheading-plain { /* "What's PMF?" heading inside the box */
+                margin-top: 0; /* Remove top margin as box provides it */
+                margin-bottom: 0.75rem; /* Space below heading inside box */
+                font-size: 1.25rem; /* Slightly smaller heading for inside a box */
+                font-weight: 700; /* Make it bold again for emphasis as a title within the box */
+                color: #191919; /* Ensure it's dark text */
+            }
+
+            .definition-box p {
+                font-size: 0.95rem; /* Slightly smaller text for definition */
+                color: #444444; /* Slightly lighter text color for definition */
+                line-height: 1.5;
+            }
+            .definition-box p:last-child {
+                margin-bottom: 0; /* Remove bottom margin for last paragraph in box */
+            }
+            /* End of definition box style */
+
+
+            .content-section a,
+            .content-section a.inline-link {
+                color: #007bff;
+                text-decoration: underline;
+            }
+
+            .content-section a:hover,
+            .content-section a.inline-link:hover {
+                color: #0056b3;
+            }
+
+            .back-arrow {
+                display: inline-block;
+                margin-bottom: 1rem;
+                font-size: 1rem;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: bold;
+                transition: color 0.2s ease;
+            }
+
+            .back-arrow:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <a href="https://goyalayus.github.io" class="back-arrow" aria-label="Go to homepage">⬅ Home</a>
+
+            <section class="content-section">
+                <h1 class="page-main-title">2 Startups</h1>
+
+                <p>Startups aren't a single thing; they're a <strong>two-parter:</strong></p>
+                <ol class="pmf-phases">
+                    <li>Before Product-Market Fit (PMF)</li>
+                    <li>After Product-Market Fit (PMF)</li>
+                </ol>
+
+                <div class="definition-box">
+                    <h2 class="subheading-plain">What's PMF?</h2>
+                    <p>It's when you <strong>know</strong> people need your thing, a small crew <strong>loves</strong> loves it, retention's high, and you've figured out scaling. You just need cash to scale.</p>
+                </div>
+
+                <p>The thing is, these two phases aren't just a bit different; they're totally different, a full 180. The rules and physics for both are completely different.</p>
+                
+                <p class="orange-highlight">Post-PMF startups need a totally different name. The damage from this lack of distinction is insane; calling both by the same name should be criminal.</p>
+
+                <p>So many times you're watching a founder interview, they're giving post-PMF advice, and you try to apply it to pre-PMF. And obviously, the advice just doesn't work there.</p>
+
+                <p>All Y Combinator advice is generally pre-PMF advice.</p>
+                
+                <p>Me and my friends almost never even discuss the post-PMF startup stuff. There's zero point talking or planning or prepping for that bit until you actually hit PMF. So our focus is super narrowed on finding pre-PMF advice and actually doing it.</p>
+            </section>
+        </main>
+    </body>
+</html>

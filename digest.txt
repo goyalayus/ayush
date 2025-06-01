@@ -5,6 +5,7 @@ Directory structure:
     ├── peeple.html
     ├── style.css
     └── blog/
+        ├── distribution-for-pmf.html
         ├── how-llm-tokenizers-work-bpe.html
         ├── imagegen-skill-issue.html
         ├── startup-context.html
@@ -80,6 +81,16 @@ File: blog.html
                 <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem;">Blog Posts</h1>
                 
                 <div class="blog-post-list">
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/distribution-for-pmf.html">Distribution for PMF</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">
+                            Founders with distribution have an advantage in finding PMF. This post explores how, the common pitfalls, and a potential solution for leveraging audience effectively.
+                        </p>
+                        <a href="blog/distribution-for-pmf.html" class="inline-link">Read more →</a>
+                    </article>
+
                     <article class="blog-post-item">
                         <h2 class="blog-post-title">
                             <a href="blog/students-who-stammer.html">Students in Tech who stutter/stammer</a>
@@ -582,6 +593,155 @@ strong {
 .hover-container:hover .hover-box {
     display: block;
 }
+
+
+
+================================================
+File: blog/distribution-for-pmf.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Distribution for PMF - Ayush's Blog</title>
+        <meta name="description" content="Exploring the advantages and nuances of having distribution for achieving Product-Market Fit, and how founders can leverage it." />
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Distribution for PMF - Ayush's Blog" />
+        <meta property="og:description" content="Exploring the advantages and nuances of having distribution for achieving Product-Market Fit, and how founders can leverage it." />
+        <meta property="og:image" content="https://goyalayus.github.io/ayush.jpeg" />
+        <meta property="og:url" content="https://goyalayus.github.io/blog/distribution-for-pmf.html" />
+        <meta property="og:site_name" content="Ayush's Blog" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            body {
+                background-color: #ffffff;
+                background-image: none;
+                font-family: 'Space Mono', monospace;
+                color: #333333;
+                line-height: 1.6;
+                padding: 0.5rem 1rem 2rem 1rem;
+                max-width: 700px;
+                margin: 0.5rem auto 2rem auto;
+            }
+
+            main {
+                padding-top: 0;
+            }
+
+            .page-main-title {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                border-bottom: none;
+                text-transform: none;
+                text-align: left;
+            }
+
+            .content-section h2 {
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 2.5rem;
+                margin-bottom: 1rem;
+                border-bottom: none;
+                text-transform: none;
+            }
+
+            .content-section p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                color: #333333;
+            }
+
+            .content-section ul {
+                list-style: disc;
+                margin-left: 20px;
+                padding-left: 5px;
+                margin-bottom: 1.5rem;
+            }
+
+            .content-section ul li {
+                margin-bottom: 0.75rem;
+                border-left: none;
+                padding-left: 0;
+            }
+
+            .content-section ul li strong {
+                font-weight: 700;
+            }
+
+            .content-section a,
+            .content-section a.inline-link {
+                color: #007bff;
+                text-decoration: underline;
+            }
+
+            .content-section a:hover,
+            .content-section a.inline-link:hover {
+                color: #0056b3;
+            }
+
+            .back-arrow {
+                display: inline-block;
+                margin-bottom: 1rem;
+                font-size: 1rem;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: bold;
+                transition: color 0.2s ease;
+            }
+
+            .back-arrow:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <a href="https://goyalayus.github.io" class="back-arrow" aria-label="Go to homepage">⬅ Home</a>
+
+            <section class="content-section">
+                <h1 class="page-main-title">Distribution for PMF</h1>
+
+                <p>Founders who have distribution have a real advantage but not in the way people think about it.</p>
+
+                <p>As a founder, your first startup almost never works out. You try a dozen ideas and maybe one works out.</p>
+
+                <p>But what do I mean by trying out an idea? It means building the product, reaching your niche audience (100 people who absolutely love your product), taking feedback from these and finding product-market fit (basically high retention on product).</p>
+
+                <p>Most founders struggle with finding these <em>100 people who have the potential to love your product</em>, for whom you were building your product.</p>
+
+                <p>Now you can reach them in three ways:</p>
+                <ul>
+                    <li><strong>Manually</strong> - you cold email people, try to get intros, physical marketing.</li>
+                    <li><strong>You burn investor money to buy distribution</strong> - paid sponsorships / ads.</li>
+                    <li><strong>You have your own distribution</strong> - suppose you have 10k followers on Twitter. Now you can shitpost about your product and tell other people to repost your product post (10k followers gives you credibility). Also, most people on tech Twitter are early adopters. So your <em>speed to market</em> increases a lot, and you are able to do many experiments and get to PMF fast.</li>
+                </ul>
+
+                <p>But this has a flaw. The flaw is, suppose you were building a dev tool and your Twitter following came in massive help there, but you did not get PMF. Now you get an idea to start a construction software. None of your followers belong to this space. Now what do you do? Maybe you ask someone from the construction space to repost your post, and yeah, I think this will work to at least get some 100 people, but you can't do this repeatedly. Not every post of yours your friend is gonna retweet.</p>
+
+                <p>But this is even more complicated. For example, you make content around college students who want to startup, and your product is around corporate people who want to startup, then also you end up in the same problem. Retweets are easier in this case but still.</p>
+
+                <p>One solution to this is I think to become something like <a href="https://x.com/waitin4agi_" target="_blank" rel="noopener noreferrer">Varun Mayya</a>. Get to a million followers on YouTube. Then suppose you are building something for Tier-1 city nurses, for example, you just have to post a tweet/YouTube post about rolling it out to early beta testers and boom you have 1000 <em>niche</em> and <em>targeted users using your product</em>, much quicker feedback.</p>
+
+                <p>But building this massive distribution takes years. So another simple way is to pay a very niche but very strong cult-following Twitter account (1–10k followers). But you need to have some money to do this — either savings or funding.</p>
+            </section>
+        </main>
+    </body>
+</html>
 
 
 

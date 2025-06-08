@@ -5,6 +5,7 @@ Directory structure:
     ├── peeple.html
     ├── style.css
     └── blog/
+        ├── decoding-transformers.html
         ├── distribution-for-pmf.html
         ├── how-llm-tokenizers-work-bpe.html
         ├── imagegen-skill-issue.html
@@ -82,6 +83,16 @@ File: blog.html
                 <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 2rem;">Blog Posts</h1>
                 
                 <div class="blog-post-list">
+                    <article class="blog-post-item">
+                        <h2 class="blog-post-title">
+                            <a href="blog/decoding-transformers.html">Decoding Transformers</a>
+                        </h2>
+                        <p class="text blog-post-excerpt">
+                            An in-depth look at how Transformer models work, covering pretraining, batching, embeddings, attention mechanisms, and sampling strategies for LLMs.
+                        </p>
+                        <a href="blog/decoding-transformers.html" class="inline-link">Read more →</a>
+                    </article>
+
                     <article class="blog-post-item">
                         <h2 class="blog-post-title">
                             <a href="blog/two-startups.html">2 Startups</a>
@@ -604,6 +615,744 @@ strong {
 .hover-container:hover .hover-box {
     display: block;
 }
+
+
+
+================================================
+File: blog/decoding-transformers.html
+================================================
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Decoding Transformers - Ayush's Blog</title>
+        <meta name="description" content="An in-depth look at how Transformer models work, covering pretraining, batching, embeddings, attention mechanisms, and sampling strategies for LLMs." />
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Decoding Transformers - Ayush's Blog" />
+        <meta property="og:description" content="An in-depth look at how Transformer models work, covering pretraining, batching, embeddings, attention mechanisms, and sampling strategies for LLMs." />
+        <meta property="og:image" content="https://goyalayus.github.io/ayush.jpeg" />
+        <meta property="og:url" content="https://goyalayus.github.io/blog/decoding-transformers.html" />
+        <meta property="og:site_name" content="Ayush's Blog" />
+
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Decoding Transformers - Ayush's Blog" />
+        <meta name="twitter:description" content="An in-depth look at how Transformer models work, covering pretraining, batching, embeddings, attention mechanisms, and sampling strategies for LLMs." />
+        <meta name="twitter:image" content="https://goyalayus.github.io/ayush.jpeg" />
+        <meta name="twitter:site" content="@goyalayus" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            :root {
+                --bg-color: #f6f6f6;
+                --text-color: #191919;
+                --accent: #ff5500;
+            }
+            body {
+                background-color: #ffffff;
+                background-image: none;
+                font-family: 'Space Mono', monospace;
+                color: #333333;
+                line-height: 1.6;
+                padding: 0.5rem 1rem 2rem 1rem;
+                max-width: 700px;
+                margin: 0.5rem auto 2rem auto;
+            }
+
+            main {
+                padding-top: 0;
+            }
+
+            .page-main-title {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                border-bottom: none;
+                text-transform: none;
+                text-align: left;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 2.8rem;
+                margin-bottom: 1.2rem;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 0.3rem;
+                text-transform: none;
+            }
+            .content-section h2:first-of-type {
+                margin-top: 1.5rem;
+            }
+
+            .content-section h3 {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: var(--text-color);
+                margin-top: 2rem;
+                margin-bottom: 0.8rem;
+                text-transform: none;
+            }
+            
+            .content-section p {
+                font-size: 1rem;
+                margin-bottom: 1rem; /* Reduced for tighter paras */
+                color: #333333;
+            }
+            .content-section p + p { /* Add a bit more space if one para follows another directly */
+                margin-top: 0.5rem;
+            }
+
+
+            .content-section ul, .content-section ol {
+                list-style-position: outside;
+                margin-left: 20px;
+                padding-left: 5px;
+                margin-bottom: 1.5rem;
+            }
+
+            .content-section ul li, .content-section ol li {
+                margin-bottom: 0.75rem;
+                border-left: none;
+                padding-left: 0;
+            }
+             .content-section ul li strong, .content-section ol li strong {
+                font-weight: 700;
+                color: var(--text-color);
+            }
+            
+            .content-section a,
+            .content-section a.inline-link {
+                color: #007bff;
+                text-decoration: underline;
+            }
+
+            .content-section a:hover,
+            .content-section a.inline-link:hover {
+                color: #0056b3;
+            }
+
+            .back-arrow {
+                display: inline-block;
+                margin-bottom: 1.5rem;
+                font-size: 1rem;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: bold;
+                transition: color 0.2s ease;
+            }
+
+            .back-arrow:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+
+            pre {
+                background-color: #f0f0f0;
+                padding: 1rem;
+                margin-top: 0.8rem;
+                margin-bottom: 1.5rem;
+                overflow-x: auto;
+                border: 1px solid #ddd;
+                border-left: 4px solid var(--accent);
+                font-size: 0.9em;
+                line-height: 1.4;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                border-radius: 4px;
+            }
+            pre code {
+                font-family: 'Space Mono', monospace;
+                background-color: transparent;
+                padding: 0;
+                border-radius: 0;
+                border: none;
+                font-size: inherit;
+            }
+
+            p code, li code {
+                background-color: #e0e0e0;
+                padding: 0.2em 0.4em;
+                border-radius: 3px;
+                font-size: 0.85em;
+                font-family: 'Space Mono', monospace;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 1.5rem;
+                font-size: 0.9em;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 0.5rem;
+                text-align: left;
+            }
+            th {
+                background-color: #f0f0f0;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <a href="https://goyalayus.github.io" class="back-arrow" aria-label="Go to homepage">⬅ Home</a>
+
+            <section class="content-section">
+                <h1 class="page-main-title">Decoding Transformers</h1>
+
+                <h2>LLM Pretraining</h2>
+                <p>
+                    Transformers, at their core architecture, are basically next-word prediction machines.
+                </p>
+                <p>
+                    You give it a phrase like "ayush is a good," and it will try to predict "boy." Depending on how close its prediction is to the actual next word, we calculate a loss and adjust the model's parameters.
+                </p>
+                <p>
+                    The first step is to take your entire training data and convert each word (or token) into numbers using a tokenizer. Typically, about 90% of the words form the training data, and the remaining 10% become the test data.
+                </p>
+
+                <h2>Batching Mechanics: The <code>get_batch</code> Function</h2>
+                <p><strong>Hyperparameters:</strong></p>
+                <ul>
+                    <li><code>batch_size=64</code> (sequences per batch)</li>
+                    <li><code>block_size=256</code> (context window)</li>
+                </ul>
+
+                <p><strong>Visualization:</strong></p>
+                <p>For <code>batch_size=3</code>, <code>block_size=5</code>:</p>
+                <pre>
+Original text positions: [0,1,2,3,4,5,6,7,8,...]
+Batch 0: positions 2-6 → [2,3,4,5,6]
+Batch 1: positions 5-9 → [5,6,7,8,9]
+Batch 2: positions 9-13 → [9,10,11,12,13]
+                </pre>
+                <p><strong>Resulting Tensor Shape:</strong> <code>x.shape = (batch_size, block_size)</code> → (64, 256)</p>
+                <p>
+                    The <code>get_batch</code> function is very important. It provides random input and target batches for training and testing.
+                </p>
+                <p>
+                    First, you check if it's training time or testing time and use the dataset accordingly. Suppose <code>batch_size</code> is 3, <code>block_size</code> is 5, and your training data (tokenized) is <code>[8,111,21,23,43,54,36,57,68,39,110,911]</code> (length 12).
+                </p>
+                <p>
+                    The function will generate 3 (<code>batch_size</code>) random starting indices between 0 and (length of data - <code>block_size</code>), which is (12 - 5 = 7).
+                </p>
+                <p>
+                    Suppose it chose indices 0, 2, and 5.
+                </p>
+                <p>
+                    Your <code>x</code> input batch (input sequences) will be:
+                </p>
+                <pre>
+[[  8, 111,  21,  23,  43],
+ [ 21,  23,  43,  54,  36],
+ [ 54,  36,  57,  68,  39]]
+                </pre>
+                <p>
+                    And your <code>y</code> target batch (next word for each position in <code>x</code>) will be the +1 index shifted version of <code>x</code>:
+                </p>
+                <pre>
+[[111,  21,  23,  43,  54],
+ [ 23,  43,  54,  36,  57],
+ [ 36,  57,  68,  39, 110]]
+                </pre>
+
+                <h2>Creating Embeddings</h2>
+                
+                <h3>PyTorch <code>nn.Embedding</code> - Simple Notes</h3>
+                
+                <h4>What is it?</h4>
+                <ul>
+                    <li>A layer that maps integer indices to dense vectors.</li>
+                    <li>Used to convert word or item indices into learnable embeddings.</li>
+                </ul>
+
+                <h4>Syntax</h4>
+                <pre><code class="language-python">
+import torch.nn as nn
+
+nn.Embedding(num_embeddings, embedding_dim)
+                </code></pre>
+                <ul>
+                    <li><code>num_embeddings</code>: total number of unique indices (e.g., vocabulary size)</li>
+                    <li><code>embedding_dim</code>: size of each embedding vector</li>
+                </ul>
+
+                <h4>What does <code>num_embeddings = 10</code> mean?</h4>
+                <ul>
+                    <li>It defines that there are 10 distinct items (e.g., words).</li>
+                    <li>It creates an internal lookup table of shape (10, <code>embedding_dim</code>).</li>
+                    <li>Valid input indices range from 0 to 9.</li>
+                </ul>
+
+                <h4>Example</h4>
+                <p><code>embedding = nn.Embedding(10, 3)</code> creates something like:</p>
+                <table>
+                    <thead>
+                        <tr><th>Index</th><th>Vector (3D)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>[0.12, -0.45, 0.78] (example)</td></tr>
+                        <tr><td>1</td><td>[0.34, 0.91, -0.67] (example)</td></tr>
+                        <tr><td>...</td><td>...</td></tr>
+                        <tr><td>9</td><td>[0.01, 0.22, 0.93] (example)</td></tr>
+                    </tbody>
+                </table>
+                <pre><code class="language-python">
+import torch
+import torch.nn as nn
+
+embedding = nn.Embedding(10, 3)
+input_indices = torch.LongTensor([1, 2, 4, 5])
+output_vectors = embedding(input_indices)
+print(output_vectors)
+                </code></pre>
+                <p>Example output:</p>
+                <pre>
+tensor([[ 0.6614,  0.2669,  0.0617],
+        [ 0.6213, -0.4519, -0.1661],
+        [-0.3727, -0.4709,  0.1994],
+        [ 0.1008,  0.2113,  0.3170]], grad_fn=<EmbeddingBackward0>)
+                </pre>
+                <p>The output shape is (4, 3) — 4 indices, each mapped to a 3D vector.</p>
+
+                <h4>Initialization</h4>
+                <p>Embedding vectors are randomly initialized.</p>
+
+                <h4>Trainable?</h4>
+                <p>Yes. These vectors are learnable and updated via backpropagation.</p>
+
+                <p>Let's now use these <code>nn.Embeddings</code>.</p>
+                <pre><code class="language-python">
+self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
+self.position_embedding_table = nn.Embedding(block_size, n_embd)
+                </code></pre>
+                <p>
+                    <code>n_embd</code> is the size of embeddings we wish; generally, it's around 768 (e.g. for GPT-2 base). A question may arise here: why can't we use one-hot vectors? The reason is they become very sparse. Suppose you have 45k vocab words; then it would be a 45k-length array with all indices 0 except 1.
+                </p>
+                <p>
+                    <code>vocab_size</code> is the total vocabulary in the tokenizer (generally around 50k for models like GPT-2).
+                </p>
+
+                <h3>Forward Pass Through Embeddings</h3>
+                <p>In the <code>forward</code> method:</p>
+                <pre><code class="language-python">
+tok_emb = self.token_embedding_table(idx)
+pos_emb = self.position_embedding_table(torch.arange(T, device=device))
+x = tok_emb + pos_emb
+                </code></pre>
+                <ul>
+                    <li>
+                        <strong><code>tok_emb</code>:</strong>
+                        <ul>
+                            <li>Input: <code>idx</code> of shape (B, T) → Batch of token indices.</li>
+                            <li>Output: Dense embeddings for each token. Shape: (B, T, C)</li>
+                            <li>Example (for B=2, T=2, C=2):
+                                <pre>
+idx = [[2, 5], [1, 3]]
+tok_emb = [[[0.1, 0.2], [0.3, 0.4]],
+           [[0.5, 0.6], [0.7, 0.8]]]
+                                </pre>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong><code>pos_emb</code>:</strong>
+                        <ul>
+                            <li>Input: Positions (e.g., <code>torch.arange(T)</code>) for each token in the sequence. Shape: (T)</li>
+                            <li>Output: Dense embeddings for each position. Shape: (T, C)</li>
+                            <li>Example (for T=2, C=2):
+                                <pre>
+pos_emb = [[0.01, 0.02],
+           [0.03, 0.04]]
+                                </pre>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong><code>x</code>:</strong>
+                        <ul>
+                            <li>Combines token and positional embeddings by adding them element-wise. Positional embeddings (T, C) are broadcast across the batch dimension (B) to match token embeddings (B, T, C). Shape: (B, T, C)</li>
+                            <li>Example:
+                                <pre>
+x = tok_emb + pos_emb
+  = [[[0.11, 0.22], [0.33, 0.44]],
+     [[0.51, 0.62], [0.73, 0.84]]]
+                                </pre>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h2>The Transformer Block</h2>
+                <p>Let's move forward to a Transformer block's code.</p>
+                <pre><code class="language-python">
+import torch.nn as nn
+import torch.nn.functional as F # Assuming F is used later
+
+class Block(nn.Module):
+    def __init__(self, n_embd, n_head):
+        super().__init__()
+        head_size = n_embd // n_head
+        self.sa = MultiHeadAttention(n_embd, n_head, head_size) # Assuming MultiHeadAttention takes n_embd too
+        self.ffwd = FeedForward(n_embd) # Assuming FeedForward class definition
+        self.ln1 = nn.LayerNorm(n_embd)
+        self.ln2 = nn.LayerNorm(n_embd)
+
+    def forward(self, x):
+        x = x + self.sa(self.ln1(x))
+        x = x + self.ffwd(self.ln2(x))
+        return x
+                </code></pre>
+                <p>An example instantiation:</p>
+                <pre><code class="language-python">
+# block = Block(n_embd=768, n_head=12) # Example for a typical setup
+# output = block(x_input_embeddings)
+                </code></pre>
+                <p>
+                    Now, I assume that you are a little bit familiar with how object-oriented programming works.
+                </p>
+                <p>
+                    You do not need to care about what <code>MultiHeadAttention</code> or <code>FeedForward</code> classes are as of now. You just need to know that when you run this particular line <code>block = Block(n_embd_val, n_head_val)</code>, the <code>__init__</code> method:
+                </p>
+                <pre><code class="language-python">
+    def __init__(self, n_embd, n_head):
+        super().__init__()
+        head_size = n_embd // n_head
+        self.sa = MultiHeadAttention(n_embd, n_head, head_size)
+        self.ffwd = FeedForward(n_embd)
+        self.ln1 = nn.LayerNorm(n_embd)
+        self.ln2 = nn.LayerNorm(n_embd)
+                </code></pre>
+                <p>
+                    ...runs, and you have all these attributes initialized. For example, <code>block.ffwd</code> is an object of class <code>FeedForward</code>.
+                </p>
+                <p>
+                    When <code>self.ffwd = FeedForward(n_embd)</code> this code runs, the <code>__init__</code> method inside this <code>FeedForward</code> class also runs and helps create attributes for the object (<code>self.ffwd</code>). You do not need to know how that <code>__init__</code> method looks as of now.
+                </p>
+                <p>
+                    And when you run <code>output = block(x)</code>, because the <code>Block</code> class inherits from <code>nn.Module</code>, the <code>forward</code> method will automatically run with the execution of this line. So:
+                </p>
+                <pre><code class="language-python">
+    def forward(self, x):
+        x = x + self.sa(self.ln1(x))
+        x = x + self.ffwd(self.ln2(x))
+        return x
+                </code></pre>
+                <p>
+                    First, this line <code>x = x + self.sa(self.ln1(x))</code> would run. Let's break this down.
+                </p>
+                <p>
+                    <code>self.ln1(x)</code> means the <code>forward</code> method of this <code>ln1</code> object (LayerNorm) will run with input <code>x</code>.
+                </p>
+                <p>
+                    Similarly, for <code>self.sa(self.ln1(x))</code>, the <code>forward</code> method of the <code>self.sa</code> object (MultiHeadAttention) will run with <code>self.ln1(x)</code> as input. The same logic applies to the line below it for the feedforward network.
+                </p>
+                <p>
+                    Now, some of you might be wondering what <code>nn.LayerNorm(n_embd)</code> does. Basically, it takes your input <code>x</code> and normalizes it across the embedding dimension for each token.
+                </p>
+
+                <h2>Multi-Head Self-Attention In-depth</h2>
+                <p>
+                    So now let's explore the line <code>x = x + self.sa(self.ln1(x))</code> in depth, focusing on the <code>MultiHeadAttention</code> part.
+                </p>
+                <p>
+                    Currently, each token has a dimension of <code>n_embd</code>. Now, I want you to remember, and just remember for now, that there is a process called *attention*. One important thing to note about attention is we pass it the matrix (basically our input <code>x</code>) of dimension (batch size, block size, <code>n_embd</code>), and it does some calculations on that matrix and outputs it with dimension (batch size, block size, <code>head_size</code>).
+                </p>
+                <p>
+                    Remember, <code>head_size = n_embd // n_head</code>.
+                </p>
+                <p>
+                    So, what multi-head attention does is, it creates (number of heads) * attention processes (or "heads"). You input (batch size, block size, <code>n_embd</code>) and get (number of heads) matrices, each of (batch size, block size, <code>head_size</code>).
+                </p>
+                <p>
+                    Suppose number of heads is 3, <code>n_embd = 9</code>, so <code>head_size = 3</code>. An input token embedding <code>[2,4,3,5,8,6,7,3,1]</code> (9-dim) would conceptually result in 3 matrices (3-dim each from each head), for example: <code>[21,34,54]</code>, <code>[1.2,5.4,32]</code>, <code>[2.3,6.1,.9]</code>.
+                </p>
+                <p>
+                    Then what we do is concatenate all these head outputs: <code>[21,34,54,1.2,5.4,32,2.3,6.1,0.9]</code> (back to 9-dim) and usually pass it through a final linear projection.
+                </p>
+                <p>
+                    In the line <code>x = x + self.sa(self.ln1(x))</code>, the output of <code>self.sa(...)</code> (the multi-head attention mechanism) will have the same dimension <code>n_embd</code> as the input <code>x</code>.
+                </p>
+
+                <h2>The Attention Mechanism (Single Head)</h2>
+                <p>Now let's move to this attention thing, what does this do?</p>
+                <pre><code class="language-python">
+class Head(nn.Module):
+    def __init__(self, n_embd, head_size, block_size, dropout_val):
+        super().__init__()
+        self.key = nn.Linear(n_embd, head_size, bias=False)
+        self.query = nn.Linear(n_embd, head_size, bias=False)
+        self.value = nn.Linear(n_embd, head_size, bias=False)
+        self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
+        self.dropout = nn.Dropout(dropout_val)
+
+    def forward(self, x):
+        B, T, C_in = x.shape
+        k = self.key(x)
+        q = self.query(x)
+        
+        wei = q @ k.transpose(-2, -1) * k.shape[-1]**-0.5
+        
+        wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf'))
+        
+        wei = F.softmax(wei, dim=-1)
+        wei = self.dropout(wei)
+        
+        v = self.value(x)
+        out = wei @ v
+        return out
+                </code></pre>
+                <p>
+                    <code>k = self.key(x)</code> and <code>q = self.query(x)</code> both take <code>x</code> (with dimension B, T, <code>n_embd</code>) and produce matrices K and Q respectively, each with dimension (B, T, <code>head_size</code>) via linear transformations.
+                </p>
+                <p>
+                    Now, in the line <code>wei = q @ k.transpose(-2, -1) * k.shape[-1]**-0.5</code>, we calculate the scaled dot-product attention scores. <code>q @ k.transpose(-2, -1)</code> performs a matrix multiplication between queries (Q) and transposed keys (K<sup>T</sup>), resulting in a matrix <code>wei</code> of dimension (B, T, T). If you remember, <code>block_size</code> (T) was the number of tokens we are processing at once.
+                </p>
+                <p>
+                    So now, let us understand the philosophy behind attention. The meaning of words is different in different contexts. For example, consider these two sentences:
+                </p>
+                <ol>
+                    <li>This bag is <strong>light</strong>.</li>
+                    <li>I turned on the <strong>light</strong>.</li>
+                </ol>
+                <p>
+                    The word is the same, "light," but the meaning is totally different. So how do we capture this meaning via the attention mechanism? You see that <code>wei</code> matrix; for one batch item, it has dimensions (T, T) or (block_size, block_size). What this does is calculate the importance of each token with respect to every other token in the sequence.
+                </p>
+                <p>Conceptually, for a sequence "this is a good boy" (T=5), <code>wei</code> before masking and softmax might look like:</p>
+                <table>
+                    <thead><tr><th>Query Token</th><th>Key: this</th><th>Key: is</th><th>Key: a</th><th>Key: good</th><th>Key: boy</th></tr></thead>
+                    <tbody>
+                        <tr><td>this</td><td>0.98</td><td>0.62</td><td>0.47</td><td>0.33</td><td>0.21</td></tr>
+                        <tr><td>is</td><td>0.61</td><td>0.97</td><td>0.56</td><td>0.45</td><td>0.29</td></tr>
+                        <tr><td>a</td><td>0.44</td><td>0.59</td><td>0.96</td><td>0.52</td><td>0.34</td></tr>
+                        <tr><td>good</td><td>0.32</td><td>0.49</td><td>0.53</td><td>0.95</td><td>0.68</td></tr>
+                        <tr><td>boy</td><td>0.25</td><td>0.33</td><td>0.37</td><td>0.66</td><td>0.94</td></tr>
+                    </tbody>
+                </table>
+                <p>
+                    So here you can see the <code>block_size</code> is 5. Now, one thing to note is how we train this transformer for tasks like next-word prediction.
+                </p>
+                <p>
+                    I will first give it the word "this" and ask it to predict the next word, which is "is". Then I will give it "this is" and ask it to predict the next word, which is "a".
+                </p>
+                <p>
+                    Now, for a given token to predict the *next* token, you do not want the model to "see" or know about future tokens in the sequence (e.g., when processing "is", it shouldn't know "a" comes after). Otherwise, it would be cheating. So, we *mask* it.
+                </p>
+                <p>Here is how the masked version of <code>wei</code> (before softmax) looks:</p>
+                <table>
+                    <thead><tr><th>Query Token</th><th>Key: this</th><th>Key: is</th><th>Key: a</th><th>Key: good</th><th>Key: boy</th></tr></thead>
+                    <tbody>
+                        <tr><td>this</td><td>0.98</td><td>-∞</td><td>-∞</td><td>-∞</td><td>-∞</td></tr>
+                        <tr><td>is</td><td>0.61</td><td>0.97</td><td>-∞</td><td>-∞</td><td>-∞</td></tr>
+                        <tr><td>a</td><td>0.44</td><td>0.59</td><td>0.96</td><td>-∞</td><td>-∞</td></tr>
+                        <tr><td>good</td><td>0.32</td><td>0.49</td><td>0.53</td><td>0.95</td><td>-∞</td></tr>
+                        <tr><td>boy</td><td>0.25</td><td>0.33</td><td>0.37</td><td>0.66</td><td>0.94</td></tr>
+                    </tbody>
+                </table>
+                <p>
+                    Now you might be wondering why I used negative infinity (<code>-inf</code>) instead of 0. Wait, let me show you. So now, as you can see, when the model is processing the token "is" (as a query), it can attend to "this" and "is" (as keys), but its attention to "a", "good", and "boy" is blocked (set to <code>-inf</code>).
+                </p>
+                <p>
+                    Now what we do is apply softmax to this masked <code>wei</code> matrix (<code>F.softmax(wei, dim=-1)</code>). This converts the scores in each row into a probability distribution, meaning the sum of attention weights in each row will be 1.
+                </p>
+                <p>So after applying softmax, it looks like (attention weights):</p>
+                <table>
+                    <thead><tr><th>Query Token</th><th>Attends to: this</th><th>Attends to: is</th><th>Attends to: a</th><th>Attends to: good</th><th>Attends to: boy</th></tr></thead>
+                    <tbody>
+                        <tr><td>this</td><td>1.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td></tr>
+                        <tr><td>is</td><td>0.36</td><td>0.64</td><td>0.00</td><td>0.00</td><td>0.00</td></tr>
+                        <tr><td>a</td><td>0.24</td><td>0.39</td><td>0.37</td><td>0.00</td><td>0.00</td></tr>
+                        <tr><td>good</td><td>0.19</td><td>0.26</td><td>0.28</td><td>0.27</td><td>0.00</td></tr>
+                        <tr><td>boy</td><td>0.15</td><td>0.19</td><td>0.20</td><td>0.25</td><td>0.21</td></tr>
+                    </tbody>
+                </table>
+                <p>
+                    Now, <code>wei</code> is of dimension (B, T, T), but we need to get an output of dimension (B, T, <code>head_size</code>) for this attention head.
+                </p>
+                <p>
+                    So we multiply it with the Value matrix (<code>v = self.value(x)</code>, which has shape B, T, <code>head_size</code>). The operation is <code>out = wei @ v</code>. This results in <code>out</code> with shape (B, T, <code>head_size</code>), which is a weighted sum of the value vectors.
+                </p>
+                <p>
+                    Now you might be wondering why we use multiple attention heads. What's wrong with using one attention? We use multiple attention heads to allow the model to capture different types of relationships or "sentiments" simultaneously. Some heads might capture what words are emotionally more important, while other attention heads might capture grammatical superiority, and so on.
+                </p>
+                
+                <h2>FeedForward Network (FFN)</h2>
+                <p>
+                    So after passing our input <code>x</code> (B, T, <code>n_embd</code>) through this multi-head attention mechanism (which includes concatenating head outputs and a final linear projection), we get a richer meaning output <code>x</code> (still with dimensions B, T, <code>n_embd</code> after the residual connection).
+                </p>
+                <p>
+                    Now we pass this through a position-wise feedforward neural network (FFN). The FFN typically consists of two linear transformations with a non-linear activation function in between. A common structure is:
+                </p>
+                <ul>
+                    <li>Linear Layer 1: Projects the input from dimension <code>n_embd</code> to a higher dimension, often 4 times larger (4 * <code>n_embd</code>).</li>
+                    <li>Non-linear Activation: Applies a non-linear function like ReLU or GELU.</li>
+                    <li>Linear Layer 2: Projects the output back to the original dimension <code>n_embd</code>.</li>
+                </ul>
+                <p>
+                    This whole sequence (Multi-Head Attention + Add & Norm -> Feedforward + Add & Norm) is called a Transformer block. And we pass our <code>x</code> input through multiple such blocks, one after another:
+                </p>
+                <pre>
+x → block 1 → x' → block 2 → x'' .....
+                </pre>
+
+                <h2>Final Output and Loss Calculation</h2>
+                <p>Now let's move ahead to the model's main <code>forward</code> method, which orchestrates these components.</p>
+                <pre><code class="language-python">
+class YourTransformerModel(nn.Module):
+    def __init__(self, vocab_size, n_embd, block_size, n_head, n_layer, dropout):
+        super().__init__()
+        self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
+        self.position_embedding_table = nn.Embedding(block_size, n_embd)
+        self.blocks = nn.Sequential(*[Block(n_embd, n_head) for _ in range(n_layer)])
+        self.ln_f = nn.LayerNorm(n_embd) 
+        self.lm_head = nn.Linear(n_embd, vocab_size)
+        self.dropout = nn.Dropout(dropout) 
+
+    def forward(self, idx, targets=None):
+        B, T = idx.shape
+
+        tok_emb = self.token_embedding_table(idx) 
+        pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device))
+        x = self.dropout(tok_emb + pos_emb)
+        
+        x = self.blocks(x) 
+        
+        x = self.ln_f(x) 
+
+        if targets is not None:
+            logits = self.lm_head(x)
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
+        else:
+            logits = self.lm_head(x[:, [-1], :])
+            loss = None
+            
+        return logits, loss
+                </code></pre>
+                <p>
+                    The initial lines for token and positional embeddings, their summation, and dropout are what we've discussed. The <code>self.blocks(x)</code> line passes the combined embeddings through the stack of Transformer blocks.
+                </p>
+                <p>
+                    The <code>def forward(self, idx, targets=None):</code> method takes input token indices <code>idx</code> (shape B, T) and optional <code>targets</code>.
+                </p>
+                <p>
+                    <code>x = self.ln_f(x)</code> applies a final layer normalization to the output of the Transformer blocks.
+                </p>
+                <p>
+                    The line <code>if targets is not None:</code> means if we have targets (which we calculated at the start for training), we are in training mode (not inference mode like when you use ChatGPT).
+                </p>
+                <p>
+                    Then, <code>logits = self.lm_head(x)</code> applies a linear layer (<code>lm_head</code>) that takes the processed <code>x</code> (B, T, <code>n_embd</code>) and projects it to (B, T, <code>vocab_size</code>). These are the raw scores for each possible next token.
+                </p>
+                <p>
+                    Now, if you remember, <code>vocab_size</code> is the set of all possible tokens. So, for each token in the input sequence, <code>logits</code> gives scores for every token in the vocabulary as a potential successor. For an input "ayush is good", for the representation corresponding to "ayush", we want the logit for "is" to be high. The model is trained accordingly.
+                </p>
+                <p>
+                    <code>loss = F.cross_entropy(...)</code> then calculates the cross-entropy loss between these predicted <code>logits</code> and the actual <code>targets</code> (e.g., "is good boy"). I am not covering cross-entropy loss here; you can google it or ask ChatGPT.
+                </p>
+                <p>
+                    The <code>else:</code> block handles inference mode.
+                </p>
+                <p>
+                    <code>logits = self.lm_head(x[:, [-1], :])</code> means that if you are in inference mode, do not calculate the loss. Instead, just give the score of the next word for the *last* word in the input sequence. If "ayush is good" is the input (and <code>block_size</code> allows for it), we are asking the model to give scores for what will come after "good".
+                </p>
+                <p>
+                    The expression <code>x[:, [-1], :]</code> works as follows:
+                </p>
+                <ul>
+                    <li><code>x</code> has shape (B, T, <code>n_embd</code>) — batch size, sequence length, embedding dimension.</li>
+                    <li><code>x[:, [-1], :]</code> selects the last token's embedding (at index T-1) in the sequence for each batch item.</li>
+                    <li>The shape after indexing is (B, 1, <code>n_embd</code>):
+                        <ul>
+                            <li><code>:</code> → all batches</li>
+                            <li><code>[-1]</code> → last token position (kept as a dimension of size 1)</li>
+                            <li><code>:</code> → all embedding dimensions</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h2>Sampling Strategies in Inference Time</h2>
+                
+                <h3>1. What Are Sampling Strategies?</h3>
+                <p>
+                    When generating text, the model produces a vector of logits (unnormalized scores) for every possible next token. To turn these into an actual token choice, you need a sampling strategy:
+                </p>
+                <ul>
+                    <li><strong>Greedy Decoding:</strong> Always pick the token with the highest probability (least random).</li>
+                    <li><strong>Random Sampling:</strong> Pick tokens according to their probability distribution (more creative).</li>
+                    <li><strong>Temperature & Top-k:</strong> Methods to control the balance between randomness and determinism.</li>
+                </ul>
+
+                <h3>2. Temperature</h3>
+                <h4>What is it?</h4>
+                <p>A scalar value that controls the "sharpness" or "flatness" of the probability distribution.</p>
+                <h4>How is it used?</h4>
+                <pre><code class="language-python">
+logits = logits / temperature
+probs = F.softmax(logits, dim=-1)
+                </code></pre>
+                <ul>
+                    <li>Low temperature (<1): Makes the distribution sharper (model is more confident, less random).</li>
+                    <li>High temperature (>1): Flattens the distribution (model is more random, more creative).</li>
+                </ul>
+                <h4>Example:</h4>
+                <p>If logits = <code>[2.0, 1.0, 0.1]</code>:</p>
+                <ul>
+                    <li>With temperature 1.0: softmax is "normal."</li>
+                    <li>With temperature 0.5: logits become <code>[4.0, 2.0, 0.2]</code> → softmax is sharper.</li>
+                    <li>With temperature 2.0: logits become <code>[1.0, 0.5, 0.05]</code> → softmax is flatter.</li>
+                </ul>
+
+                <h3>3. Top-k Sampling</h3>
+                <h4>What is it?</h4>
+                <p>A technique to restrict sampling to only the top <code>k</code> most likely tokens.</p>
+                <h4>How is it used?</h4>
+                <pre><code class="language-python">
+v, _ = torch.topk(logits, k)
+logits[logits < v[:, [-1]]] = -float('Inf')
+probs = F.softmax(logits, dim=-1)
+                </code></pre>
+                <ul>
+                    <li>Only the <code>k</code> tokens with the highest logits are kept; all others are set to <code>-inf</code> (zero probability after softmax).</li>
+                    <li>The next token is sampled only from these top <code>k</code> candidates.</li>
+                </ul>
+                <h4>Why use it?</h4>
+                <ul>
+                    <li>Prevents the model from picking rare, low-probability tokens that can lead to incoherent or nonsensical text.</li>
+                    <li>Balances creativity and coherence.</li>
+                </ul>
+
+                <h3>4. Combined Effect</h3>
+                <ul>
+                    <li>Temperature controls the overall randomness.</li>
+                    <li>Top-k controls the candidate set for each prediction.</li>
+                    <li>Used together, you can finely tune the model’s output: from deterministic and repetitive to creative and surprising.</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+                <p>
+                    If you have ever heard of "context window," it is the same as <code>block_size</code>.
+                </p>
+                <p>
+                    This majorly sums up the Transformer architecture. For queries, hit me up at <a href="https://x.com/goyalayus" target="_blank" rel="noopener noreferrer">@goyalayus</a>.
+                </p>
+            </section>
+        </main>
+    </body>
+</html>
 
 
 

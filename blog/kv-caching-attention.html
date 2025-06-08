@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>KV Caching in Attention - Unlocking Faster LLM Inference - Ayush's Blog</title>
+        <meta name="description" content="Discover how KV caching dramatically speeds up text generation in Large Language Models by cleverly reusing previous calculations in the attention mechanism." />
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="KV Caching in Attention - Unlocking Faster LLM Inference - Ayush's Blog" />
+        <meta property="og:description" content="Discover how KV caching dramatically speeds up text generation in Large Language Models by cleverly reusing previous calculations in the attention mechanism." />
+        <meta property="og:image" content="https://goyalayus.github.io/ayush.jpeg" /> <!-- Using a generic image -->
+        <meta property="og:url" content="https://goyalayus.github.io/blog/kv-caching-attention.html" />
+        <meta property="og:site_name" content="Ayush's Blog" />
+
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="KV Caching in Attention - Unlocking Faster LLM Inference - Ayush's Blog" />
+        <meta name="twitter:description" content="Discover how KV caching dramatically speeds up text generation in Large Language Models by cleverly reusing previous calculations in the attention mechanism." />
+        <meta name="twitter:image" content="https://goyalayus.github.io/ayush.jpeg" /> <!-- Using a generic image -->
+        <meta name="twitter:site" content="@goyalayus" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <style>
+            :root {
+                --bg-color: #f6f6f6;
+                --text-color: #191919;
+                --accent: #ff5500;
+            }
+            body {
+                background-color: #ffffff;
+                background-image: none;
+                font-family: 'Space Mono', monospace;
+                color: #333333;
+                line-height: 1.6;
+                padding: 0.5rem 1rem 2rem 1rem;
+                max-width: 700px;
+                margin: 0.5rem auto 2rem auto;
+            }
+
+            main {
+                padding-top: 0;
+            }
+
+            .page-main-title {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                border-bottom: none;
+                text-transform: none;
+                text-align: left;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+                font-weight: 700;
+                color: #191919;
+                margin-top: 2.8rem;
+                margin-bottom: 1.2rem;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 0.3rem;
+                text-transform: none;
+            }
+            .content-section h2:first-of-type {
+                margin-top: 1.5rem;
+            }
+
+            .content-section h3 {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: var(--text-color);
+                margin-top: 2rem;
+                margin-bottom: 0.8rem;
+                text-transform: none;
+            }
+            
+            .content-section p {
+                font-size: 1rem;
+                margin-bottom: 1rem; 
+                color: #333333;
+            }
+            .content-section p + p { 
+                margin-top: 0.5rem;
+            }
+
+            .content-section ul, .content-section ol {
+                list-style-position: outside;
+                margin-left: 20px;
+                padding-left: 5px;
+                margin-bottom: 1.5rem;
+            }
+
+            .content-section ul li, .content-section ol li {
+                margin-bottom: 0.75rem;
+                border-left: none;
+                padding-left: 0;
+            }
+             .content-section ul li strong, .content-section ol li strong {
+                font-weight: 700;
+                color: var(--text-color);
+            }
+            
+            .content-section a,
+            .content-section a.inline-link {
+                color: #007bff;
+                text-decoration: underline;
+            }
+
+            .content-section a:hover,
+            .content-section a.inline-link:hover {
+                color: #0056b3;
+            }
+
+            .back-arrow {
+                display: inline-block;
+                margin-bottom: 1.5rem;
+                font-size: 1rem;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: bold;
+                transition: color 0.2s ease;
+            }
+
+            .back-arrow:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+
+            pre {
+                background-color: #f0f0f0;
+                padding: 1rem;
+                margin-top: 0.8rem;
+                margin-bottom: 1.5rem;
+                overflow-x: auto;
+                border: 1px solid #ddd;
+                border-left: 4px solid var(--accent);
+                font-size: 0.9em;
+                line-height: 1.4;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                border-radius: 4px;
+            }
+            pre code {
+                font-family: 'Space Mono', monospace;
+                background-color: transparent;
+                padding: 0;
+                border-radius: 0;
+                border: none;
+                font-size: inherit;
+            }
+
+            p code, li code {
+                background-color: #e0e0e0;
+                padding: 0.2em 0.4em;
+                border-radius: 3px;
+                font-size: 0.85em;
+                font-family: 'Space Mono', monospace;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 1.5rem;
+                font-size: 0.9em;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 0.5rem;
+                text-align: left;
+            }
+            th {
+                background-color: #f0f0f0;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <a href="https://goyalayus.github.io" class="back-arrow" aria-label="Go to homepage">⬅ Home</a>
+
+            <section class="content-section">
+                <h1 class="page-main-title">Unlocking Faster LLM Inference: The Magic of KV Caching in Attention</h1>
+
+                <p>Large Language Models (LLMs) like ChatGPT generate text one token (word or sub-word unit) at a time. At the heart of this generation process lies the "attention mechanism," which allows the model to weigh the importance of different words in the input sequence when producing the next word. While powerful, calculating attention for each new token can be computationally intensive if we do it naively. This is where KV caching comes in as a crucial optimization.</p>
+
+                <h2>The Challenge: Repetitive Work in Attention</h2>
+                <p>Imagine an LLM has already generated "The cat sat on the" and is now trying to predict the next word, say "mat." To do this, the attention mechanism needs to compute Query (Q), Key (K), and Value (V) vectors for all tokens in the current sequence ("The", "cat", "sat", "on", "the", and the new token being processed).</p>
+                <p>Without KV caching, every time we generate a new token, the model would recompute the K and V vectors for *all* preceding tokens in the sequence. For "mat", it would calculate K and V for "The", "cat", "sat", "on", "the". When it then tries to predict the token *after* "mat", it would again recompute K and V for "The", "cat", "sat", "on", "the", "mat". This is incredibly wasteful, especially for long sequences!</p>
+
+                <h2>KV Caching to the Rescue!</h2>
+                <p>KV caching elegantly solves this problem. The core idea is simple: <strong>store (cache) the Key (K) and Value (V) vectors for all previously processed tokens.</strong></p>
+                <p>When generating a new token (let's call this token T):</p>
+                <ul>
+                    <li>The model only computes the K and V vectors for this <strong>new</strong> input token (K<sub>T</sub>, V<sub>T</sub>).</li>
+                    <li>The Query vector (Q<sub>T</sub>) is also computed only for this <strong>new</strong> token.</li>
+                    <li>It retrieves the cached K vectors (K<sub>1</sub>...K<sub>T-1</sub>) and V vectors (V<sub>1</sub>...V<sub>T-1</sub>) for all previously generated tokens.</li>
+                    <li>These are then concatenated:
+                        <ul>
+                            <li>Full Keys: [K<sub>1</sub>, ..., K<sub>T-1</sub>, K<sub>T</sub>]</li>
+                            <li>Full Values: [V<sub>1</sub>, ..., V<sub>T-1</sub>, V<sub>T</sub>]</li>
+                        </ul>
+                    </li>
+                    <li>The new Query Q<sub>T</sub> then attends to this complete set of Keys (and uses the corresponding Values).</li>
+                </ul>
+                <p>This way, we avoid redundant computations for K and V vectors of past tokens, significantly speeding up the process.</p>
+
+                <h2>Why This Works: The Math Doesn't Lie</h2>
+                <p>You might wonder why we can just reuse old K and V vectors. The reason lies in how they are calculated. For any token <em>i</em> in the sequence, its Key vector K<sub>i</sub> is typically computed as <code>K_i = Embedding_i @ W_K</code>, where <code>Embedding_i</code> is the input embedding of token <em>i</em>, and <code>W_K</code> is a weight matrix learned by the model. A similar calculation happens for the Value vector V<sub>i</sub> (<code>V_i = Embedding_i @ W_V</code>).</p>
+                <p>When we are generating the T-th token, we have a new input, <code>Embedding_T</code>. This is used to calculate the *newest* Key (K<sub>T</sub>) and Value (V<sub>T</sub>).</p>
+                <p>Crucially, the K and V vectors for all previous tokens (K<sub>1</sub>...K<sub>T-1</sub> and V<sub>1</sub>...V<sub>T-1</sub>) were calculated based on *their own* input embeddings (<code>Embedding_1</code>...<code>Embedding_T-1</code>) and the same weight matrices (<code>W_K</code>, <code>W_V</code>). The arrival of a new token <code>Embedding_T</code> doesn't change the previous embeddings, nor does it change the weight matrices. Therefore, the K and V vectors for all prior tokens remain valid and can be directly reused from the cache. We only need the latest input to produce the latest Key and Value pair.</p>
+
+                <h2>A Closer Look: Tensor Transformations</h2>
+                <p>Let's break down the process step-by-step, comparing a full pass (no cache) with an incremental pass (with KV cache). We're assuming we are generating the T-th token.</p>
+                <ul>
+                    <li><strong>B</strong>: Batch size</li>
+                    <li><strong>nh</strong>: Number of heads</li>
+                    <li><strong>T</strong>: Total sequence length so far (including the current token being generated)</li>
+                    <li><strong>hs</strong>: Head size (typically <code>d_model / nh</code>)</li>
+                    <li><strong>d_model</strong>: Embedding dimension</li>
+                </ul>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Step</th>
+                            <th>Without KV Cache (Full Pass for token T)</th>
+                            <th>With KV Cache (Incremental Decode for token T)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Input to Attention</td>
+                            <td>Full sequence embedding: (B, T, d_model)</td>
+                            <td>Single new token's embedding: (B, 1, d_model)</td>
+                        </tr>
+                        <tr>
+                            <td>1. Generate Q, K, V</td>
+                            <td>q, k, v shapes are (B, nh, T, hs)</td>
+                            <td>
+                                q_new: (B, nh, 1, hs) <br/>
+                                k_new, v_new: (B, nh, 1, hs)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2. Retrieve from Cache</td>
+                            <td>N/A</td>
+                            <td>
+                                k_cache, v_cache are retrieved. <br/>
+                                Shape: (B, nh, T-1, hs)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3. Concatenate K and V</td>
+                            <td>N/A (k and v are already full)</td>
+                            <td>
+                                k = concat(k_cache, k_new) → (B, nh, T, hs) <br/>
+                                v = concat(v_cache, v_new) → (B, nh, T, hs)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4. att_scores = q @ k.transpose(-2, -1)</td>
+                            <td>
+                                (B,nh,T,hs) @ (B,nh,hs,T) <br/>
+                                Result: (B, nh, T, T)
+                            </td>
+                            <td>
+                                (B,nh,1,hs) @ (B,nh,hs,T) <br/>
+                                Result: (B, nh, 1, T)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5. Apply Causal Mask</td>
+                            <td>A full (T, T) causal mask is applied (e.g., `masked_fill`).</td>
+                            <td>No explicit (T,T) masking needed for this step. The `1` dimension in `q_new` ensures its attention scores are for the current token attending to all T tokens (past and current). Causality is inherently handled by only feeding previous tokens' K/V.</td>
+                        </tr>
+                        <tr>
+                            <td>6. Softmax (on att_scores)</td>
+                            <td>Applied to the (B, nh, T, T) tensor.</td>
+                            <td>Applied to the (B, nh, 1, T) tensor.</td>
+                        </tr>
+                        <tr>
+                            <td>7. Output y = att_probs @ v</td>
+                            <td>
+                                (B,nh,T,T) @ (B,nh,T,hs) <br/>
+                                Result: (B, nh, T, hs)
+                            </td>
+                            <td>
+                                (B,nh,1,T) @ (B,nh,T,hs) <br/>
+                                Result: (B, nh, 1, hs)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Notice the critical difference in step 4 and 7. With KV caching, the query <code>q_new</code> has a sequence length of 1. This means we are only calculating attention scores for the current token with respect to all keys. The resulting attention output <code>y</code> also has a sequence length of 1, representing the context-aware information for the current prediction. </p>
+
+                <h2>From Attention to the Next Word</h2>
+                <p>After the attention mechanism (using KV caching) produces its output for the current token, which has a shape like (B, nh, 1, hs), this output undergoes further transformations:</p>
+                <ol>
+                    <li>It's typically reshaped or projected back to the model's main embedding dimension, resulting in a tensor of shape (B, 1, d_model). This vector is the rich, context-aware representation of the token we are about to predict.</li>
+                    <li>This single vector then passes through the subsequent Feed-Forward Network (FFN) layer and Layer Normalization within the Transformer block.</li>
+                    <li>Finally, the output from the last Transformer block (still representing a single token prediction, so shape (B, 1, d_model)) is passed to a linear layer (often called the "language model head" or <code>lm_head</code>). This layer projects it from <code>d_model</code> to the vocabulary size (<code>vocab_size</code>).</li>
+                    <li>The result is a tensor of logits of shape (B, 1, <code>vocab_size</code>). These logits are raw, unnormalized scores for every possible token in the vocabulary.</li>
+                    <li>A softmax function is applied to these logits to convert them into probabilities.</li>
+                    <li>A sampling strategy (like greedy sampling, top-k sampling, or nucleus sampling) is then used to select the actual next token from this probability distribution.</li>
+                </ol>
+                <p>And the cycle repeats for the next token, again leveraging the (now updated) KV cache!</p>
+
+                <h2>The Big Wins: Benefits of KV Caching</h2>
+                <p>KV caching isn't just a minor tweak; it's a fundamental optimization for LLM inference:</p>
+                <ul>
+                    <li><strong>Drastic Speed-up:</strong> Reduces the computational load from O(T<sup>2</sup>) per token (in attention) towards O(T) in typical scenarios for the K,V generation part, and the QK<sup>T</sup> multiplication becomes much smaller.</li>
+                    <li><strong>Reduced Memory Bandwidth:</strong> Less data needs to be loaded and processed for K and V calculations at each step.</li>
+                    <li><strong>Enables Longer Sequences:</strong> Makes generating very long sequences of text practically feasible, as the cost of each additional token doesn't grow as quadratically.</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+                <p>KV caching is a cornerstone of efficient autoregressive inference in Transformer-based Large Language Models. By intelligently reusing previously computed Key and Value states, it dramatically reduces computational overhead, allowing for faster text generation and the ability to handle much longer sequences. Understanding KV caching is key to appreciating how modern LLMs can generate extensive and coherent text so rapidly.</p>
+            </section>
+        </main>
+    </body>
+</html>
